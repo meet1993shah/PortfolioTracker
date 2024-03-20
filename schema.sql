@@ -1,8 +1,3 @@
--- Load the JSON1 extension
-SELECT load_extension('libsqlite3.so'); -- for Unix-like systems
--- OR
-SELECT load_extension('sqlite3.dll'); -- for Windows
-
 CREATE TABLE IF NOT EXISTS investment (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT NOT NULL,
