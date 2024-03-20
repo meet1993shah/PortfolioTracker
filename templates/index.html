@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Tracker</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+	<div id="controls">
+		<form id="noteForm">
+			<input type="text" id="noteContent" placeholder="Note content" required>
+			<select id="noteQuadrant">
+				<option value="urgent-important">Urgent & Important</option>
+				<option value="urgent-not-important">Urgent & Not Important</option>
+				<option value="not-urgent-important">Not Urgent & Important</option>
+				<option value="not-urgent-not-important">Not Urgent & Not Important</option>
+			</select>
+			<input type="color" id="noteColor" value="#ffff88">
+			<button type="submit">Add Note</button>
+		</form>
+	</div>
+	<div id="search-container">
+		<input type="text" id="search-input" placeholder="Search notes...">
+	</div>
+	<div id="whiteboard">
+		<div id="urgent-important" class="quadrant urgent-important">
+			<h3>Urgent & Important</h3>
+			<br>
+		</div>
+		<div id="urgent-not-important" class="quadrant urgent-not-important">
+			<h3>Urgent & Not Important</h3>
+			<br>
+		</div>
+		<div id="not-urgent-important" class="quadrant not-urgent-important">
+			<h3>Not Urgent & Important</h3>
+			<br>
+		</div>
+		<div id="not-urgent-not-important" class="quadrant not-urgent-not-important">
+			<h3>Not Urgent & Not Important</h3>
+			<br>
+		</div>
+	</div>
+	<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
