@@ -1,36 +1,14 @@
 # TaskTracker
 
-The Task Tracker App is a simple yet powerful tool designed to help users manage their tasks efficiently. Built with Flask, Javascript, Python, HTML, and CSS, this application offers a user-friendly interface and a set of features that cater to anyone looking to organize their tasks better.
+The Portfolio Tracker App is a simple yet powerful application designed to help users keep track of their investment portfolio manually and displaying future projections. Built with Flask, Javascript, Python, HTML, and CSS, this application offers a user-friendly interface and a set of features that cater to anyone looking for an alternative to Excel Sheets for their investments.
 
 ## Main Features
-
-* **Quadrant-Based Task Organization:** Tasks are divided into 4 quadrants based on their urgency and importance: Urgent & Important, Urgent & Not Important, Not Urgent & Important, and Not Urgent & Not Important. This method helps users prioritize their tasks effectively.
-
-![WhiteBoard with 4 quadrants](./example_images/initial_screen.png)
-
-* **Create Notes:** Users can easily create notes for tasks and place them in any of the 4 quadrants, allowing for flexible task management.
-
-![Create a new Note](./example_images/create_note.png)
-
-* **Edit Notes:** Each note is editable, enabling users to update task details as needed.
-
-![Editing a note](./example_images/edit_note.png)
-
-* **Delete Notes:** Users have the option to delete tasks that are no longer relevant or have been completed.
-
-* **Drag and Drop:** Tasks can be moved between quadrants through a simple drag-and-drop interface, making task re-prioritization effortless.
-
-* **Search Notes:** A search bar allows users to quickly find specific tasks, with matching notes highlighted for easy identification.
-
-![Searching notes](./example_images/search_notes.png)
-
-* **Color Coding:**  Notes and quadrants support different colors, enhancing visual organization and making it easier to distinguish between tasks.
 
 ## Technologies & Frameworks User
 
 * **Flask:** A micro web framework written in Python, used for handling backend logic, routing, and server-side operations.
 
-* **JavaScript:** Utilized for creating dynamic content on the client side, including drag-and-drop functionality, search features, and real-time updates to the UI.
+* **JavaScript:** Utilized for creating dynamic content on the client side.
 
 * **Python:** The core programming language used for server-side logic and interaction with the database.
 
@@ -44,7 +22,7 @@ The Task Tracker App is a simple yet powerful tool designed to help users manage
 
 1. **Clone the Repository:** Clone the project to your local machine.
 ```bash
-git clone https://github.com/meet1993shah/TaskTracker.git
+git clone https://github.com/meet1993shah/PortfolioTracker.git
 ```
 
 2. **Set Up a Virtual Environment:** Navigate to the project directory and set up a Python virtual environment.
@@ -75,4 +53,4 @@ python3 app.py
 
 ## Contributing
 
-Contributions to the Task Tracker App are welcome! Whether it's bug reports, feature requests, or code contributions, pleasefeel free to reach out or submit a pull request.
+Contributions to the Portfolio Tracker App are welcome! Whether it's bug reports, feature requests, or code contributions, please feel free to reach out or submit a pull request.
