@@ -33,50 +33,6 @@ def init_db():
 def index():
 	return render_template('index.html')
 
-@app.route('/notes', methods=['POST'])
-def add_note():
-	data = request.get_json()
-	db = get_db()
-	cursor = db.cursor()
-	cursor.execute('INSERT INTO notes (quadrant, content, color) VALUES (?, ?, ?)',
-		[data['quadrant'], data['content'], data['color']])
-	db.commit()
-	return jsonify(success=True, noteId=cursor.lastrowid)
-
-@app.route('/notes/<int:note_id>', methods=['DELETE'])
-def delete_note(note_id):
-	db = get_db()
-	db.execute('DELETE FROM notes WHERE id = ?', [note_id])
-	db.commit()
-	return jsonify(success=True)
-
-@app.route('/notes/<int:note_id>', methods=['PUT'])
-def update_note_quadrant(note_id):
-	data = request.get_json()
-	db = get_db()
-	db.execute('UPDATE notes SET quadrant = ? WHERE id = ?',
-		[data['quadrant'], note_id])
-	db.commit()
-	return jsonify(success=True)
-
-@app.route('/notes/<int:note_id>', methods=['PATCH'])
-def update_note_content(note_id):
-	data = request.get_json()
-	db = get_db()
-	db.execute('UPDATE notes SET content = ? WHERE id = ?',
-		[data['content'], note_id])
-	db.commit()
-	return jsonify(success=True)
-
-@app.route('/notes', methods=['GET'])
-def get_notes():
-	db = get_db_connection()
-	cursor = db.execute('SELECT id, quadrant, content, color FROM notes')
-	notes = cursor.fetchall()
-	db.close()
-	notes_list = [{key: note[key] for key in note.keys()} for note in notes]
-	return jsonify(success=True, notes=notes_list)
-
 
 if __name__ == '__main__':
 	init_db() # Ensure the database is initialized
