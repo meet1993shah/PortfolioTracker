@@ -13,38 +13,16 @@ body, html {
 	margin-left: 20px;
 }
 
-#search-container {
-	position: absolute;
-	top: 0;
-	right: 0;
-	gap: 5px;
-	margin-top: 10px;
-	margin-right: 20px;
-}
 
-#whiteboard {
+#dashboard {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: repeat(2, 1fr);
 	gap: 5px;
 	height: 90vh;
 	margin: 20px;
 	background-color: #f0f0f0;
 }
 
-.quadrant {
-	border: 2px solid #000;
-	position: relative;
-	overflow: auto;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-start;
-	row-gap: 2px;
-	column-gap: 2px;
-	flex-direction: column;
-}
-
-.note {
+.entry {
 	border: 1px solid #000;
 	padding: 10px;
 	margin: 2px;
@@ -62,7 +40,7 @@ body, html {
 	cursor: pointer;
 }
 
-.note-content {
+.entry-content {
 	color: #ffff88;
 	font-weight: bold;
 	mix-blend-mode: difference;
@@ -72,9 +50,3 @@ body, html {
 	border: 10px solid red;
 	font-weight: bolder;
 }
-
-/* Quadrant sepecific styles */
-.urgent-important { background-color: #ffcccc; }
-.urgent-not-important { background-color: #ccffcc; }
-.not-urgent-important { background-color: #ccccff; }
-.not-urgent-not-important { background-color: #ffffcc; }
