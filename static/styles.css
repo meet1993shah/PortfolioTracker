@@ -1,0 +1,79 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.top-section {
+    height: 20%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.bottom-section {
+    height: 80%;
+    display: flex;
+}
+
+.panel {
+    flex: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.visualization {
+    width: 30%;
+    background-color: #FFD700; /* Gold color */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.display {
+    width: 70%;
+    background-color: #87CEEB; /* Sky blue color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section h3 {
+    margin: 0;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.top-options { 
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.bottom-options { 
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.top-options button, .bottom-options button {
+    padding: 10px 20px;
+    margin: 0 10px; /* Add margin between buttons */
+    background-color: #4CAF50; /* Green color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.top-options button:hover, .bottom-options button:hover {
+    background-color: #45a049; /* Darker green color on hover */
+}

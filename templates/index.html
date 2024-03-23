@@ -7,36 +7,35 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
+    <div class="top-section">
         <div class="panel">
-            <div class="options">
-                <div class="section">
-                    <h3>Portfolio Options</h3>
-                    <button id="add_portfolio_entry">Add Entry</button>
-                    <button id="update_portfolio_entry">Update Entry</button>
-                    <button id="delete_portfolio_entry">Delete Entry</button>
-                </div>
-                <div class="section">
-                    <h3>Investment Options</h3>
-                    <button id="add_investment">Add Investment</button>
-                    <button id="update_investment">Update Investment</button>
-                    <button id="delete_investment">Delete Investment</button>
-                </div>
+            <h3>Portfolio Options</h3>
+            <div class="top-options">
+                <button id="add_portfolio_entry">Add Entry</button>
+                <button id="update_portfolio_entry">Update Entry</button>
+                <button id="delete_portfolio_entry">Delete Entry</button>
             </div>
         </div>
+        <div class="panel">
+            <h3>Investment Options</h3>
+            <div class="top-options">
+                <button id="add_investment">Add Investment</button>
+                <button id="update_investment">Update Investment</button>
+                <button id="delete_investment">Delete Investment</button>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-section">
         <div class="visualization">
-            <div class="options">
-                <div class="section">
-                    <h3>Visualizations</h3>
-                    <button id="projections">Projections</button>
-                    <button id="pie_charts">Pie Charts</button>
-                    <button id="re_calculator">RE Calculator</button>
-                    <button id="past_entries">Past Entries</button>
-                </div>
+            <h3>Visualizations</h3>
+            <div class="bottom-options">
+                <button id="projections">Projections</button>
+                <button id="pie_charts">Pie Charts</button>
+                <button id="past_entries">Past Entries</button>
             </div>
-            <div class="content">
-                <!-- Content will be loaded dynamically here -->
-            </div>
+        </div>
+        <div class="display">
+            <!-- Placeholder for display section -->
         </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>

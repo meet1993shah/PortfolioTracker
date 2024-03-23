@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS investment (
+CREATE TABLE IF NOT EXISTS investments (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT NOT NULL,
 	created_at DEFAULT CURRENT_TIMESTAMP,
@@ -14,4 +14,4 @@ CREATE TABLE IF NOT EXISTS portfolio (
 	updated_at DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_entry_time ON portfolio (entry_time);
+CREATE INDEX IF NOT EXISTS idx_entry_time ON portfolio (entry_time);
