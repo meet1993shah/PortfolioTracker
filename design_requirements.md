@@ -9,13 +9,17 @@
 		* Add a new investment
 		* Update an existing investment
 		* Delete an investment
-	* Visualizations Options -
+* Should have left panel with Visualizations Options -
 		* See future balance projections
 		* Pie chart for individual entry
 		* investment projections
 		* Retirement goal calculator
 		* See past entries
+* Right entire area should be for visualization
 
+* Design should look like -
+```python
+'''
 +----------------------------------------------------------------+
 |                       Portfolio Options                        |
 |    Add Entry            Update Entry          Delete Entry     |
@@ -45,6 +49,8 @@
 |                |                                               |
 |                |                                               |
 +----------------+-----------------------------------------------+
+'''
+```
 
 
 * Add entry should open a form in a window to add a new entry.
@@ -76,7 +82,7 @@ The form will have all the current investments with empty boxes for input. Only 
 
 * All visualizations will be displayed in the right side box.
 
-
+* At the beginning the past 10 entries will be displayed.
 
 
 
