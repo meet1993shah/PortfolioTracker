@@ -33,6 +33,22 @@ def init_db():
 def index():
 	return render_template('index.html')
 
+# Route for adding a new portfolio entry
+@app.route('/add_portfolio_entry', methods=['POST'])
+def add_portfolio_entry():
+    # Retrieve data from the form
+    entry_time = request.form['entry_time']
+    investments = request.form['investments']
+    balance = request.form['balance']
+
+    # Insert the data into the database
+    conn = get_db_connection()
+    conn.execute('INSERT INTO portfolio (entry_time, investments, balance) VALUES (?, ?, ?)',
+                 (entry_time, investments, balance))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'message': 'Portfolio entry added successfully'}), 200
 
 if __name__ == '__main__':
 	init_db() # Ensure the database is initialized

@@ -1,52 +1,26 @@
-body, html {
-	height: 100%;
-	margin:  0;
-	font-family: Arial, sans-serif;
+.container {
+    display: flex;
 }
 
-#controls {
-	position: relative;
-	top: 0;
-	left: 0;
-	gap: 5px;
-	margin-top: 10px;
-	margin-left: 20px;
+.panel {
+    flex: 1;
+    border-right: 1px solid #ccc;
+    padding: 20px;
 }
 
-
-#dashboard {
-	display: grid;
-	gap: 5px;
-	height: 90vh;
-	margin: 20px;
-	background-color: #f0f0f0;
+.visualization {
+    flex: 2;
+    padding: 20px;
 }
 
-.entry {
-	border: 1px solid #000;
-	padding: 10px;
-	margin: 2px;
-	cursor: grab;
-	position: relative;
-	flex: 0 0 auto;
-	mix-blend-mode: darken;
+.options {
+    margin-bottom: 20px;
 }
 
-.delete-icon {
-	cursor: pointer;
+.section {
+    margin-bottom: 10px;
 }
 
-.edit-icon {
-	cursor: pointer;
-}
-
-.entry-content {
-	color: #ffff88;
-	font-weight: bold;
-	mix-blend-mode: difference;
-}
-
-.highlighted {
-	border: 10px solid red;
-	font-weight: bolder;
+button {
+    margin-right: 10px;
 }

@@ -1,17 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Portfolio Tracker</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-	<div id="controls">
-		<form id="entryForm">
-			<button type="submit">Add Entry</button>
-		</form>
-	</div>
-	<div id="dashboard" class="dashboard"></div>
-	<script src="{{ url_for('static', filename='script.js') }}"></script>
+    <div class="container">
+        <div class="panel">
+            <div class="options">
+                <div class="section">
+                    <h3>Portfolio Options</h3>
+                    <button id="add_portfolio_entry">Add Entry</button>
+                    <button id="update_portfolio_entry">Update Entry</button>
+                    <button id="delete_portfolio_entry">Delete Entry</button>
+                </div>
+                <div class="section">
+                    <h3>Investment Options</h3>
+                    <button id="add_investment">Add Investment</button>
+                    <button id="update_investment">Update Investment</button>
+                    <button id="delete_investment">Delete Investment</button>
+                </div>
+            </div>
+        </div>
+        <div class="visualization">
+            <div class="options">
+                <div class="section">
+                    <h3>Visualizations</h3>
+                    <button id="projections">Projections</button>
+                    <button id="pie_charts">Pie Charts</button>
+                    <button id="re_calculator">RE Calculator</button>
+                    <button id="past_entries">Past Entries</button>
+                </div>
+            </div>
+            <div class="content">
+                <!-- Content will be loaded dynamically here -->
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
