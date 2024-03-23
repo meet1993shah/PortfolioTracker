@@ -83,15 +83,3 @@ The form will have all the current investments with empty boxes for input. Only 
 * All visualizations will be displayed in the right side box.
 
 * At the beginning the past 10 entries will be displayed.
-
-
-
-
-
-
-
-
-
-
-
-

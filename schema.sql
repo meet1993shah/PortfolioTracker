@@ -8,8 +8,10 @@ CREATE TABLE IF NOT EXISTS investment (
 CREATE TABLE IF NOT EXISTS portfolio (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	entry_time DATE DEFAULT CURRENT_DATE,
+	investments JSON NOT NULL,
 	balance INTEGER DEFAULT 0,
-	investments JSON
+	created_at DEFAULT CURRENT_TIMESTAMP,
+	updated_at DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX idx_entry_time ON portfolio (entry_time);
