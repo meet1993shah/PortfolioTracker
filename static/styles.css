@@ -16,13 +16,6 @@ body, html {
     border-bottom: solid black;
 }
 
-.panel {
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-}
-
 .panel-header {
     display: flex;
     flex-direction: row;
@@ -30,7 +23,7 @@ body, html {
     align-items: center;
     width: 100%;
     background-color: darkseagreen;
-    height: 50%;
+    margin-bottom: 0%;
 }
 
 .top-options {
@@ -39,7 +32,25 @@ body, html {
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
-    height: 50%;
+    margin-bottom: 1%;
+}
+
+.top-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 80%;
+    height: 70%;
+}
+
+.top-icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 20%;
+    height: 70%;
 }
 
 .bottom-section {
@@ -79,18 +90,10 @@ body, html {
     background-color: darkkseagreen;
 }
 
-.display {
-    width: 80%;
-    background-color: seagreen;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .top-options button {
     padding: 0%;
-    margin-left: 1%;
-    margin-right: 1%;
+    margin-left: 2%;
+    margin-right: 2%;
     background-color: #4CAF50; /* Green color */
     color: white;
     border: none;
@@ -98,8 +101,8 @@ body, html {
     transition: background-color 0.3s;
     border: solid black;
     width: 60%;
-    height:  100%;
-    font-size: 200%;
+    height:  200%;
+    font-size: 150%;
 }
 
 .bottom-options button {
@@ -111,11 +114,45 @@ body, html {
     border: solid black;
     width: 130%;
     height: 10%;
-    font-size: 200%;
+    font-size: 150%;
     margin-top: 5%;
     margin-bottom: 5%;
 }
 
 .top-options button:hover, .bottom-options button:hover {
     background-color: #45a049; /* Darker green color on hover */
+}
+
+.display {
+    width: 80%;
+    background-color: seagreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.display table {
+    border-collapse: collapse;
+    width: 90%;
+    background-color: white;
+    border: 2px solid black;
+}
+
+.display th, .display td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+.display th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.display tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.display tr:hover {
+    background-color: #ddd;
 }
