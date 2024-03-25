@@ -4,6 +4,28 @@ The Portfolio Tracker App is a simple yet powerful application designed to help 
 
 ## Main Features
 
+* Adding / Updating / Deleting of the Accounts
+
+* Adding / Updating / Deleting of Portfolio Entry
+
+* Pie Charts for the portfolio entry
+
+* Projections for the future growth
+
+* Display of past entries
+
+* Retirement Calculator
+
+* Completely offline, so minimal risk of data breach
+
+* DB Migrations
+
+* Encrypted Database with a password
+
+* Encrypted DB sync to online store
+
+* Mobile application 
+
 ## Technologies & Frameworks User
 
 * **Flask:** A micro web framework written in Python, used for handling backend logic, routing, and server-side operations.
