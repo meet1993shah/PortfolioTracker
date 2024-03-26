@@ -150,7 +150,6 @@ def get_past_entries():
                 entry_dict[investments_names[key]] = value
             del entry_dict['investments']
             entries_dicts.append(entry_dict)
-        print(entries_dicts)
         return jsonify(entries_dicts), 200
     except sqlite3.Error:
         return jsonify({'message': 'Error: Unable to fetch past entries.'}), 500
@@ -171,7 +170,6 @@ def get_last_entry():
         for key, value in entry_investments.items():
             entry_dict[investments_names[key]] = value
         del entry_dict['investments']
-        print(entry_dict)
         return jsonify(entry_dict), 200
     except Exception as e:
         return jsonify({'message': 'Error: Unable to fetch last entry: ' + e}), 500

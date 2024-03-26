@@ -73,7 +73,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	    });
 	});
 
-	function loadPastEntries() {
+	// Add event listener for past entries
+	document.getElementById('past_entries').addEventListener('click', function() {
 		const displaySection = document.querySelector('.display');
 	    displaySection.innerHTML = ''; // Clear previous content
 
@@ -123,10 +124,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	            displaySection.appendChild(table);
 	        })
 	        .catch(error => console.error('Error fetching past entries:', error));
-	}
-	document.getElementById('past_entries').addEventListener('click', loadPastEntries());
+	});
 
-	function drawPieChart() {
+	// Add event listener for pie chart
+	document.getElementById('pie_chart').addEventListener('click', function() {
 		const displaySection = document.querySelector('.display');
 	    displaySection.innerHTML = ''; // Clear previous content
 	    // Display last entry in a pie chart
@@ -181,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	                    responsive: true,
 	                    title: {
 	                        display: true,
-	                        text: 'Last Investment Entry (Pie Chart)'
+	                        text: 'Investment Distribution (Pie Chart)'
 	                    }
 	                }
 	            });
@@ -190,10 +191,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	            console.error('Error fetching last entry:', error);
 	            alert('Failed to fetch last entry. Please try again.');
 	        });
-	}
-	document.getElementById('pie_chart').addEventListener('click', drawPieChart);
+	});
 
-	// Add event listener for the "Clear Screen" button
+	// Add event listener for Clear Screen
     document.getElementById('clear_display').addEventListener('click', function() {
         const displaySection = document.querySelector('.display');
         displaySection.innerHTML = ''; // Clear the display content
