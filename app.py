@@ -174,6 +174,37 @@ def get_last_entry():
     except Exception as e:
         return jsonify({'message': 'Error: Unable to fetch last entry: ' + e}), 500
 
+@app.route('/entry_data', methods=['GET'])
+def get_entry_data():
+    try:
+        entry_date = request.args.get('date')
+        conn = get_db_connection()
+        c = conn.cursor()
+
+        # Retrieve investment names
+        c.execute('''SELECT id, name FROM investments''')
+        investment_accounts = c.fetchall()
+        investments_names = {str(row['id']): row['name'] for row in investment_accounts}
+
+        # Retrieve entry data for the specified date
+        c.execute('''SELECT investments FROM portfolio WHERE entry_time = ?''', (entry_date,))
+        entry_data = c.fetchone()
+
+        if entry_data:
+            entry_dict = dict(entry_data)
+            entry_investments = json.loads(entry_dict['investments'])
+
+            # Map investment IDs to names
+            for key, value in entry_investments.items():
+                entry_dict[investments_names[key]] = value
+
+            del entry_dict['investments']
+            return jsonify(entry_dict), 200
+        else:
+            return jsonify({'message': 'No entry data found for the specified date'}), 404
+    except Exception as e:
+        return jsonify({'message': 'Error: Unable to fetch entry data: ' + str(e)}), 500
+
 if __name__ == '__main__':
     init_db() # Ensure the database is initialized
     app.run(debug=True)

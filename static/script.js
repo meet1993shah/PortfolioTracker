@@ -126,71 +126,94 @@ document.addEventListener('DOMContentLoaded', function() {
 	        .catch(error => console.error('Error fetching past entries:', error));
 	});
 
-	// Add event listener for pie chart
+	// Add event listener for Pie Chart
 	document.getElementById('pie_chart').addEventListener('click', function() {
-		const displaySection = document.querySelector('.display');
+	    const displaySection = document.querySelector('.display');
 	    displaySection.innerHTML = ''; // Clear previous content
-	    // Display last entry in a pie chart
-	    fetch('/last_entry')
-	        .then(response => {
-	            if (!response.ok) {
-	                throw new Error('Failed to fetch last entry');
-	            }
-	            return response.json();
-	        })
-	        .then(data => {
-	            // Extract labels and values from the last entry
-	            const labels = Object.keys(data);
-	            const values = Object.values(data);
 
-	            // Create a canvas element for the pie chart
-	            const canvas = document.createElement('canvas');
-	            canvas.setAttribute('id', 'pieChart');
-	            canvas.style.width = '80%'; // Adjust width as needed
-	            canvas.style.height = '400px'; // Set a fixed height
-	            displaySection.appendChild(canvas);
+	    // Create a form to input the entry date
+	    const form = document.createElement('form');
+	    form.classList.add('entry-form');
+	    form.innerHTML = `
+	        <label for="entry-date">Enter Entry Date:</label>
+	        <input type="date" id="entry-date" required>
+	        <button type="submit">Submit</button>
+	    `;
+	    displaySection.appendChild(form);
 
-	            // Use Chart.js to draw the pie chart
-	            new Chart(canvas, {
-	                type: 'pie',
-	                data: {
-	                    labels: labels,
-	                    datasets: [{
-	                        data: values,
-	                        backgroundColor: [
-	                            'rgba(255, 99, 132, 0.7)',
-	                            'rgba(54, 162, 235, 0.7)',
-	                            'rgba(255, 206, 86, 0.7)',
-	                            'rgba(75, 192, 192, 0.7)',
-	                            'rgba(153, 102, 255, 0.7)',
-	                            'rgba(255, 159, 64, 0.7)'
-	                            // Add more colors if needed
-	                        ],
-	                        borderColor: [
-	                            'rgba(255, 99, 132, 1)',
-	                            'rgba(54, 162, 235, 1)',
-	                            'rgba(255, 206, 86, 1)',
-	                            'rgba(75, 192, 192, 1)',
-	                            'rgba(153, 102, 255, 1)',
-	                            'rgba(255, 159, 64, 1)'
-	                            // Add more colors if needed
-	                        ],
-	                        borderWidth: 1
-	                    }]
-	                },
-	                options: {
-	                    responsive: true,
-	                    title: {
-	                        display: true,
-	                        text: 'Investment Distribution (Pie Chart)'
-	                    }
+	    // Add event listener for form submission
+	    form.addEventListener('submit', function(event) {
+	        event.preventDefault();
+
+	        // Get the entry date from the form
+	        const entryDate = document.getElementById('entry-date').value;
+
+	        // Fetch data for the specified entry date
+	        fetch('/entry_data?date=' + entryDate)
+	            .then(response => {
+	                if (!response.ok) {
+	                    throw new Error('Failed to fetch data for the specified date');
 	                }
-	            });
-	        })
-	        .catch(error => {
-	            console.error('Error fetching last entry:', error);
-	            alert('Failed to fetch last entry. Please try again.');
-	        });
+	                return response.json();
+	            })
+	            .then(data => {
+	                // Extract labels and values from the data
+	                const labels = Object.keys(data);
+	                const values = Object.values(data);
+
+	                // Create a canvas element for the pie chart
+	                const canvas = document.createElement('canvas');
+	                canvas.setAttribute('id', 'pieChart');
+	                canvas.style.width = '80%'; // Adjust width as needed
+	                canvas.style.height = '400px'; // Set a fixed height
+	                displaySection.appendChild(canvas);
+
+	                // Use Chart.js to draw the pie chart
+	                new Chart(canvas, {
+	                    type: 'pie',
+	                    data: {
+	                        labels: labels,
+	                        datasets: [{
+	                            data: values,
+	                            backgroundColor: [
+	                                'rgba(255, 99, 132, 0.7)',
+	                                'rgba(54, 162, 235, 0.7)',
+	                                'rgba(255, 206, 86, 0.7)',
+	                                'rgba(75, 192, 192, 0.7)',
+	                                'rgba(153, 102, 255, 0.7)',
+	                                'rgba(255, 159, 64, 0.7)'
+	                                // Add more colors if needed
+	                            ],
+	                            borderColor: [
+	                                'rgba(255, 99, 132, 1)',
+	                                'rgba(54, 162, 235, 1)',
+	                                'rgba(255, 206, 86, 1)',
+	                                'rgba(75, 192, 192, 1)',
+	                                'rgba(153, 102, 255, 1)',
+	                                'rgba(255, 159, 64, 1)'
+	                                // Add more colors if needed
+	                            ],
+	                            borderWidth: 1
+	                        }]
+	                    },
+	                    options: {
+	                        responsive: true,
+	                        title: {
+	                            display: true,
+	                            text: 'Investment Distribution (Pie Chart)'
+	                        }
+	                    }
+	                });
+	            })
+	            .catch(error => {
+	                console.error('Error fetching data for the specified date:', error);
+	                alert('Failed to fetch data for the specified date. Please try again.');
+	            })
+	            .finally(() => {
+	                // Hide the form after submission
+	                form.style.display = 'none';
+            	});
+	    });
 	});
 
 	// Add event listener for Clear Screen
