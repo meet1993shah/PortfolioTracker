@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	                const canvas = document.createElement('canvas');
 	                canvas.setAttribute('id', 'pieChart');
 	                canvas.style.width = '80%'; // Adjust width as needed
-	                canvas.style.height = '400px'; // Set a fixed height
+	                canvas.style.height = '50%'; // Set a fixed height
 	                displaySection.appendChild(canvas);
 
 	                // Use Chart.js to draw the pie chart
