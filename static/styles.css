@@ -120,7 +120,7 @@ body, html {
 }
 
 .top-options button:hover, .bottom-options button:hover {
-    background-color: #45a049; /* Darker green color on hover */
+    background-color: darkgreen; /* Darker green color on hover */
 }
 
 .display {
@@ -135,24 +135,92 @@ body, html {
     border-collapse: collapse;
     width: 90%;
     background-color: white;
-    border: 2px solid black;
+    border: solid black;
 }
 
 .display th, .display td {
-    border: 1px solid black;
-    padding: 8px;
+    border: solid black;
+    padding: 0.5%;
     text-align: left;
 }
 
 .display th {
-    background-color: #4CAF50;
+    background-color: forestgreen;
     color: white;
 }
 
 .display tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: white;
 }
 
 .display tr:hover {
-    background-color: #ddd;
+    background-color: greenyellow;
+}
+
+/* Additional CSS for modal dialog box */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 200%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 20% auto;
+    padding: 1%;
+    border: solid black;
+    width: 30%;
+    display: flex;
+    flex-direction: row; /* Ensure buttons are positioned in a row */
+    justify-content: space-around; /* Adjusts the space between buttons */
+    align-items: center; /* Center-align buttons vertically */
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.modal-content button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border-radius: 3%;
+    margin: 0%;
+    font-weight: bold;
+    height: 250%;
+    font-size: 80%;
+    border:  solid black;
+}
+
+.modal-content input {
+    background-color: white;
+    color: #4CAF50;
+    margin: 0%;
+    height: 5%;
+    font-weight: bold;
+    font-size: 80%;
+    border: solid black;
+}
+
+.modal-content button:hover {
+    background-color: #45a049;
+}
+
+.close {
+    color: red;
+    float: left;
+    font-size: 150%;
+    font-weight: bold;
+    margin: 0%;
+}
+
+.close:hover,
+.close:focus {
+    color: darkred;
+    text-decoration: none;
+    cursor: pointer;
 }

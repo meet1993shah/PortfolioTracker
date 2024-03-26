@@ -14,4 +14,4 @@ CREATE TABLE IF NOT EXISTS portfolio (
 	updated_at DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_entry_time ON portfolio (entry_time);
+CREATE INDEX IF NOT EXISTS idx_entry_time ON portfolio(entry_time DESC);

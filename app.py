@@ -155,6 +155,27 @@ def get_past_entries():
     except sqlite3.Error:
         return jsonify({'message': 'Error: Unable to fetch past entries.'}), 500
 
+@app.route('/last_entry')
+def get_last_entry():
+    conn = get_db_connection()
+    c = conn.cursor()
+    try:
+        c.execute('''SELECT id, name FROM investments''')
+        investment_accounts = c.fetchall()
+        investments_names = {str(row['id']): row['name'] for row in investment_accounts}
+
+        c.execute('''SELECT investments FROM portfolio ORDER BY entry_time DESC LIMIT 1''')
+        last_entry = c.fetchall()[0]
+        entry_dict = dict(last_entry)
+        entry_investments = json.loads(entry_dict['investments'])
+        for key, value in entry_investments.items():
+            entry_dict[investments_names[key]] = value
+        del entry_dict['investments']
+        print(entry_dict)
+        return jsonify(entry_dict), 200
+    except Exception as e:
+        return jsonify({'message': 'Error: Unable to fetch last entry: ' + e}), 500
+
 if __name__ == '__main__':
     init_db() # Ensure the database is initialized
     app.run(debug=True)

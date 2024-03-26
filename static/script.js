@@ -20,30 +20,28 @@ document.addEventListener('DOMContentLoaded', function() {
         xhr.send();
     });
 
-    // Add event listeners for investment options
+	// Add event listeners for investment options
 	document.getElementById('add_investment').addEventListener('click', function() {
-	    // Open a form for adding a new investment
-	    const formWindow = window.open('', '_blank', 'width=400,height=200');
+	    // Create a modal dialog box
+	    const modal = document.getElementById('modal');
+	    modal.style.display = 'block';
 
-	    // Create the form elements
-	    const form = document.createElement('form');
-	    const nameInput = document.createElement('input');
-	    nameInput.setAttribute('type', 'text');
-	    nameInput.setAttribute('placeholder', 'Investment Name');
-	    const submitButton = document.createElement('button');
-	    submitButton.textContent = 'Submit';
+	    // Get the close button
+	    const closeButton = document.getElementsByClassName('close')[0];
 
-	    // Add form elements to the form
-	    form.appendChild(nameInput);
-	    form.appendChild(submitButton);
+	    // When the user clicks on the close button, close the modal
+	    closeButton.onclick = function() {
+	        modal.style.display = 'none';
+	    }
 
 	    // Add event listener for form submission
+	    const form = document.getElementById('investment-form');
 	    form.addEventListener('submit', function(event) {
 	        event.preventDefault();
 
 	        // Get form data
 	        const formData = {
-	            name: nameInput.value
+	            name: form.elements['investment-name'].value
 	        };
 
 	        // Send form data to server to add investment
@@ -57,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	        .then(response => {
 	            if (response.ok) {
 	                alert('Investment added successfully.');
-	                formWindow.close();
+	                modal.style.display = 'none';
 	            } else {
 	                throw new Error('Failed to add investment.');
 	            }
@@ -68,11 +66,17 @@ document.addEventListener('DOMContentLoaded', function() {
 	        });
 	    });
 
-	    // Append form to the window
-	    formWindow.document.body.appendChild(form);
+	    // Add event listener for cancel button
+	    const cancelButton = document.getElementById('cancel-button');
+	    cancelButton.addEventListener('click', function() {
+	        modal.style.display = 'none';
+	    });
 	});
 
-	document.getElementById('past_entries').addEventListener('click', function() {
+	function loadPastEntries() {
+		const displaySection = document.querySelector('.display');
+	    displaySection.innerHTML = ''; // Clear previous content
+
 	    // Display past entries in a table under the .display section
 	    fetch('/past_entries')
 	        .then(response => response.json())
@@ -116,12 +120,82 @@ document.addEventListener('DOMContentLoaded', function() {
 	                    }
 	                });
 	            });
-
-	            // Append table to the .display section
-	            const displaySection = document.querySelector('.display');
-	            displaySection.innerHTML = ''; // Clear previous content
 	            displaySection.appendChild(table);
 	        })
 	        .catch(error => console.error('Error fetching past entries:', error));
-	});
+	}
+	document.getElementById('past_entries').addEventListener('click', loadPastEntries());
+
+	function drawPieChart() {
+		const displaySection = document.querySelector('.display');
+	    displaySection.innerHTML = ''; // Clear previous content
+	    // Display last entry in a pie chart
+	    fetch('/last_entry')
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error('Failed to fetch last entry');
+	            }
+	            return response.json();
+	        })
+	        .then(data => {
+	            // Extract labels and values from the last entry
+	            const labels = Object.keys(data);
+	            const values = Object.values(data);
+
+	            // Create a canvas element for the pie chart
+	            const canvas = document.createElement('canvas');
+	            canvas.setAttribute('id', 'pieChart');
+	            canvas.style.width = '80%'; // Adjust width as needed
+	            canvas.style.height = '400px'; // Set a fixed height
+	            displaySection.appendChild(canvas);
+
+	            // Use Chart.js to draw the pie chart
+	            new Chart(canvas, {
+	                type: 'pie',
+	                data: {
+	                    labels: labels,
+	                    datasets: [{
+	                        data: values,
+	                        backgroundColor: [
+	                            'rgba(255, 99, 132, 0.7)',
+	                            'rgba(54, 162, 235, 0.7)',
+	                            'rgba(255, 206, 86, 0.7)',
+	                            'rgba(75, 192, 192, 0.7)',
+	                            'rgba(153, 102, 255, 0.7)',
+	                            'rgba(255, 159, 64, 0.7)'
+	                            // Add more colors if needed
+	                        ],
+	                        borderColor: [
+	                            'rgba(255, 99, 132, 1)',
+	                            'rgba(54, 162, 235, 1)',
+	                            'rgba(255, 206, 86, 1)',
+	                            'rgba(75, 192, 192, 1)',
+	                            'rgba(153, 102, 255, 1)',
+	                            'rgba(255, 159, 64, 1)'
+	                            // Add more colors if needed
+	                        ],
+	                        borderWidth: 1
+	                    }]
+	                },
+	                options: {
+	                    responsive: true,
+	                    title: {
+	                        display: true,
+	                        text: 'Last Investment Entry (Pie Chart)'
+	                    }
+	                }
+	            });
+	        })
+	        .catch(error => {
+	            console.error('Error fetching last entry:', error);
+	            alert('Failed to fetch last entry. Please try again.');
+	        });
+	}
+	document.getElementById('pie_chart').addEventListener('click', drawPieChart);
+
+	// Add event listener for the "Clear Screen" button
+    document.getElementById('clear_display').addEventListener('click', function() {
+        const displaySection = document.querySelector('.display');
+        displaySection.innerHTML = ''; // Clear the display content
+    });
 });
