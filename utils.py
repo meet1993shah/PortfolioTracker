@@ -1,31 +1,35 @@
 import numpy as np
 from scipy.optimize import curve_fit
+from datetime import datetime, timedelta
+
+DATE_FORMAT = "%Y-%m-%d"
 
 # Define the model function
 def model_func(x, a, b, c):
-    return a * np.power(b, x) + c
+    return (a * np.exp(b*x)) + c
 
-def get_opt_params(X_in, Y_in):
-    # Sample data points (replace with your actual data)
-    x_data = np.array(X_in)
-    y_data = np.array(Y_in)
+def get_projections(X_date, Y_in):
+    X_in = []
+    start_date = datetime.strptime(X_date[0], DATE_FORMAT)
+    for x in X_date:
+        delta = datetime.strptime(x, DATE_FORMAT)-start_date
+        X_in.append(int(delta.days))
 
-    # Perform curve fitting
-    popt, pcov = curve_fit(model_func, x_data, y_data)
-
-    # Extract optimal parameters
+    # Curve fitting
+    popt, pcov = curve_fit(model_func, np.array(X_in), np.array(Y_in))
     a_opt, b_opt, c_opt = popt
-    return (a_opt, b_opt, c_opt)
+    
+    # Projection for next month, 6 months, 1 year, 5 years, 10 years
+    last_date_int = X_in[-1]
+    X_proj_in = [last_date_int+30, last_date_int+180]
+    X_res_in = X_in + X_proj_in
 
-def get_projections(X_in, Y_in, X_proj):
-    # Sample data points (replace with your actual data)
-    x_data = np.array(X_in)
-    y_data = np.array(Y_in)
+    # Convert projected integer dates to actual dates
+    X_proj_date = [(start_date + timedelta(days=x)).date().strftime(DATE_FORMAT) for x in X_proj_in]
+    X_res_date = X_date + X_proj_date
 
-    # Perform curve fitting
-    popt, pcov = curve_fit(model_func, x_data, y_data)
+    # Calculate projected Y values
+    Y_proj = [model_func(x, a_opt, b_opt, c_opt) for x in X_proj_in]
+    Y_res = Y_in + Y_proj
 
-    # Extract optimal parameters
-    a_opt, b_opt, c_opt = popt
-    return [model_func(x, a_opt, b_opt, c_opt) for x in X_proj]
-
+    return X_res_in, X_res_date, Y_res

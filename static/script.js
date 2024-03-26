@@ -216,6 +216,86 @@ document.addEventListener('DOMContentLoaded', function() {
 	    });
 	});
 
+	// Add event listener for Projection
+	document.getElementById('projection').addEventListener('click', function() {
+	    const displaySection = document.querySelector('.display');
+	    displaySection.innerHTML = ''; // Clear previous content
+
+	    // Fetch projection data from the server
+	    fetch('/projection')
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error('Failed to fetch projection data');
+	            }
+	            return response.json();
+	        })
+	        .then(data => {
+	            const xData = data['X_data'];
+	            const xLabels = data['X_labels'];
+	            const yData = data['Y_data'];
+
+	            // Create canvas element for the line chart
+	            const canvas = document.createElement('canvas');
+	            canvas.setAttribute('id', 'lineChart');
+	            canvas.style.width = '80%'; // Adjust width as needed
+	            canvas.style.height = '60%'; // Set a fixed height
+	            displaySection.appendChild(canvas);
+
+	            // Use Chart.js to draw the line chart
+	            new Chart(canvas, {
+	                type: 'line',
+	                data: {
+	                    labels: xLabels,
+	                    datasets: [{
+	                        label: 'Balance',
+	                        data: yData,
+	                        fill: true,
+	                        borderColor: 'blue', // Color of the line
+	                        borderWidth: 2
+	                    }]
+	                },
+	                options: {
+	                    responsive: true,
+	                    title: {
+	                        display: true,
+	                        text: 'Balance Projection Over Time',
+	                        fontSize: 14,
+	                        fontColor: 'red',
+	                        fontWeight: 'bold'
+	                    },
+	                    scales: {
+	                        xAxes: [{
+	                            type: 'time',
+	                            time: {
+	                                unit: 'month' // Adjust time unit as needed
+	                            },
+	                            scaleLabel: {
+	                                display: true,
+	                                labelString: 'Date',
+	                                fontSize: 14,
+	                        		fontColor: 'red',
+	                        		fontWeight: 'bold'
+	                            }
+	                        }],
+	                        yAxes: [{
+	                            scaleLabel: {
+	                                display: true,
+	                                labelString: 'Balance',
+	                                fontSize: 14,
+	                        		fontColor: 'red',
+	                        		fontWeight: 'bold'
+	                            }
+	                        }]
+	                    }
+	                }
+	            });
+	        })
+	        .catch(error => {
+	            console.error('Error fetching projection data:', error);
+	            alert('Failed to fetch projection data. Please try again.');
+	        });
+	});
+
 	// Add event listener for Clear Screen
     document.getElementById('clear_display').addEventListener('click', function() {
         const displaySection = document.querySelector('.display');

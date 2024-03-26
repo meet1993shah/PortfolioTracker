@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify, g
 import sqlite3
+from utils import get_projections
 import json
+import os
 
 app = Flask(__name__)
 
@@ -204,6 +206,30 @@ def get_entry_data():
             return jsonify({'message': 'No entry data found for the specified date'}), 404
     except Exception as e:
         return jsonify({'message': 'Error: Unable to fetch entry data: ' + str(e)}), 500
+
+@app.route('/projection', methods=['GET'])
+def get_projection():
+    conn = get_db_connection()
+    c = conn.cursor()
+    try:
+        # Retrieve investment names
+        c.execute('''SELECT entry_time, balance FROM portfolio ORDER BY entry_time ASC''')
+        balance_data = [dict(row) for row in c.fetchall()]
+        X = [row['entry_time'] for row in balance_data]
+        Y = [row['balance'] for row in balance_data]
+        x_in, x_date, y_res = get_projections(X, Y)
+        res = {}
+        res['X_data'] = x_in
+        res['X_labels'] = x_date
+        res['Y_data'] = y_res
+        return jsonify(res), 200
+    except Exception as e:
+        return jsonify({'message': 'Error: Unable to load projection: ' + str(e)}), 500
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+        'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == '__main__':
     init_db() # Ensure the database is initialized
