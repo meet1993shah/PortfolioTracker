@@ -164,8 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	                // Create a canvas element for the pie chart
 	                const canvas = document.createElement('canvas');
 	                canvas.setAttribute('id', 'pieChart');
-	                canvas.style.width = '80%'; // Adjust width as needed
-	                canvas.style.height = '50%'; // Set a fixed height
+	                canvas.style.backgroundColor = 'seagreen';
 	                displaySection.appendChild(canvas);
 
 	                // Use Chart.js to draw the pie chart
@@ -176,32 +175,42 @@ document.addEventListener('DOMContentLoaded', function() {
 	                        datasets: [{
 	                            data: values,
 	                            backgroundColor: [
-	                                'rgba(255, 99, 132, 0.7)',
-	                                'rgba(54, 162, 235, 0.7)',
-	                                'rgba(255, 206, 86, 0.7)',
-	                                'rgba(75, 192, 192, 0.7)',
-	                                'rgba(153, 102, 255, 0.7)',
-	                                'rgba(255, 159, 64, 0.7)'
+	                                'red',
+	                                'yellow',
+	                                'blue',
+	                                'green',
+	                                'orange',
+	                                'white',
+	                                'purple',
+	                                'lime',
+	                                'pink',
+	                                'gray',
+	                                'violet'
 	                                // Add more colors if needed
 	                            ],
 	                            borderColor: [
-	                                'rgba(255, 99, 132, 1)',
-	                                'rgba(54, 162, 235, 1)',
-	                                'rgba(255, 206, 86, 1)',
-	                                'rgba(75, 192, 192, 1)',
-	                                'rgba(153, 102, 255, 1)',
-	                                'rgba(255, 159, 64, 1)'
-	                                // Add more colors if needed
+	                                'black'
 	                            ],
-	                            borderWidth: 1
+	                            borderWidth: 2
 	                        }]
 	                    },
 	                    options: {
 	                        responsive: true,
 	                        title: {
 	                            display: true,
-	                            text: 'Investment Distribution (Pie Chart)'
-	                        }
+	                            text: 'Investment Distribution (Pie Chart)',
+	                        },
+                            plugins: {
+					            legend: {
+					                labels: {
+					                    font: {
+					                        size: 14,
+					                        weight: 'bold',
+					                    },
+					                    color: 'white'
+					                }
+					            }
+					        }
 	                    }
 	                });
 	            })
@@ -237,20 +246,20 @@ document.addEventListener('DOMContentLoaded', function() {
 	            // Create canvas element for the line chart
 	            const canvas = document.createElement('canvas');
 	            canvas.setAttribute('id', 'lineChart');
-	            canvas.style.width = '80%'; // Adjust width as needed
-	            canvas.style.height = '60%'; // Set a fixed height
+	            canvas.style.backgroundColor = 'seagreen';
 	            displaySection.appendChild(canvas);
 
 	            // Use Chart.js to draw the line chart
 	            new Chart(canvas, {
 	                type: 'line',
 	                data: {
-	                    labels: xLabels,
+	                	labels: xLabels,
 	                    datasets: [{
 	                        label: 'Balance',
 	                        data: yData,
 	                        fill: true,
-	                        borderColor: 'blue', // Color of the line
+	                        borderColor: 'green', // Color of the line
+	                        backgroundColor: 'lightgreen',
 	                        borderWidth: 2
 	                    }]
 	                },
@@ -263,29 +272,35 @@ document.addEventListener('DOMContentLoaded', function() {
 	                        fontColor: 'red',
 	                        fontWeight: 'bold'
 	                    },
+	                    plugins: {
+	                        legend: {
+	                            labels: {
+	                                font: {
+	                                    size: 14,
+	                                    weight: 'bold',
+	                                },
+	                                color: 'white'
+	                            }
+	                        }
+	                    },
 	                    scales: {
-	                        xAxes: [{
-	                            type: 'time',
-	                            time: {
-	                                unit: 'month' // Adjust time unit as needed
+	                        x: {
+	                        	grid: {
+	                                color: 'white'
 	                            },
-	                            scaleLabel: {
-	                                display: true,
-	                                labelString: 'Date',
-	                                fontSize: 14,
-	                        		fontColor: 'red',
-	                        		fontWeight: 'bold'
+	                            ticks: {
+	                                color: 'white',
 	                            }
-	                        }],
-	                        yAxes: [{
-	                            scaleLabel: {
-	                                display: true,
-	                                labelString: 'Balance',
-	                                fontSize: 14,
-	                        		fontColor: 'red',
-	                        		fontWeight: 'bold'
+	                        },
+	                        y: {
+	                        	type: 'logarithmic',
+	                            grid: {
+	                                color: 'white'
+	                            },
+	                            ticks: {
+	                                color: 'white'
 	                            }
-	                        }]
+	                        }
 	                    }
 	                }
 	            });

@@ -20,10 +20,6 @@ The Portfolio Tracker App is a simple yet powerful application designed to help 
 
 * DB Migrations
 
-* Encrypted Database with a password
-
-* Encrypted DB sync to online store
-
 * Mobile application 
 
 ## Technologies & Frameworks User
