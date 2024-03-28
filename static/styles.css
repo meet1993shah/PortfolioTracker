@@ -38,19 +38,21 @@ body, html {
 .top-buttons {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    width: 80%;
+    width: 60%;
     height: 70%;
+    margin-right: 10%;
 }
 
 .top-icons {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: safe flex-end;
     align-items: center;
-    width: 20%;
-    height: 70%;
+    width: 10%;
+    height: 50%;
+    margin-left: 10%;
 }
 
 .bottom-section {
@@ -91,16 +93,15 @@ body, html {
 }
 
 .top-options button {
-    padding: 0%;
+    padding: 2%;
     margin-left: 2%;
     margin-right: 2%;
     background-color: #4CAF50; /* Green color */
     color: white;
-    border: none;
     cursor: pointer;
     transition: background-color 0.3s;
     border: solid black;
-    width: 60%;
+    width: 120%;
     height:  200%;
     font-size: 150%;
 }
@@ -224,4 +225,58 @@ body, html {
     color: darkred;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* Dropdown Button CSS */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 102%;
+    box-shadow: 10px 16px 16px 10px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content button {
+    color: black;
+    background-color: white;
+    border: none;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding-right: 5%;
+    justify-content: space-between; /* Align items and distribute space */
+}
+
+/* Style for the icon */
+.dropdown-content button::after {
+    content: attr(data-icon); /* Set the content to the data-icon attribute */
+    font-size: 1.2em; /* Adjust icon size */
+    color: black; /* Adjust icon color */
+}
+
+.dropdown-content button:hover {
+    background-color: lightgreen;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 100%;
+    font-size: 100%;
+    border: none;
+    cursor: pointer;
+}
+
+.dropbtn:hover {
+    background-color: #3e8e41;
 }

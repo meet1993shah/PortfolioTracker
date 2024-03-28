@@ -14,8 +14,22 @@
         </div>
         <div class="top-options">
             <div class="top-buttons">
-                <button id="add_portfolio_entry">Add New Portfolio Entry</button>
-                <button id="add_investment">Add New Investment Account</button>
+                <div class="dropdown">
+                    <button class="dropbtn">Portfolio Entry Options &#9662;</button>
+                    <div class="dropdown-content">
+                        <button id="add_entry" data-icon="&#43;">Add</button>
+                        <button id="update_entry" data-icon="&#9998;">Update</button>
+                        <button id="delete_entry" data-icon="&#128465;">Delete</button>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="dropbtn">Investment Account Options &#9662;</button>
+                    <div class="dropdown-content">
+                        <button id="add_account" data-icon="&#43;">Add</button>
+                        <button id="update_account" data-icon="&#9998;">Update</button>
+                        <button id="delete_account" data-icon="&#128465;">Delete</button>
+                    </div>
+                </div>
             </div>
             <div class="top-icons">
                 <button id="export_data">Sync &#10514;</button>

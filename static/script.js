@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Add event listener to the button
-    document.getElementById('add_portfolio_entry').addEventListener('click', function() {
+    document.getElementById('add_entry').addEventListener('click', function() {
         // Make an AJAX request to the /add_portfolio_entry endpoint
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '/add_portfolio_entry', true);
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 	// Add event listeners for investment options
-	document.getElementById('add_investment').addEventListener('click', function() {
+	document.getElementById('add_account').addEventListener('click', function() {
 	    // Create a modal dialog box
 	    const modal = document.getElementById('modal');
 	    modal.style.display = 'block';
