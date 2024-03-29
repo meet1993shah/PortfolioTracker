@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.investments[investmentId] = amount;
         });
 
-        fetch('/add_portfolio_entry', {
+        fetch('/add_entry', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

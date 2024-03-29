@@ -25,9 +25,9 @@
                 <div class="dropdown">
                     <button class="dropbtn">Investment Account Options &#9662;</button>
                     <div class="dropdown-content">
-                        <button id="add_account" data-icon="&#43;">Add</button>
-                        <button id="update_account" data-icon="&#9998;">Update</button>
-                        <button id="delete_account" data-icon="&#128465;">Delete</button>
+                        <button id="add_investment" data-icon="&#43;">Add</button>
+                        <button id="update_investment" data-icon="&#9998;">Update</button>
+                        <button id="delete_investment" data-icon="&#128465;">Delete</button>
                     </div>
                 </div>
             </div>
@@ -50,15 +50,6 @@
             </div>
         </div>
         <div class="display"></div>
-    </div>
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <form id="investment-form" class="investment-form">
-                <input type="text" placeholder="Investment Name" id="investment-name">
-                <button type="submit">Submit</button>
-            </form>
-            <span class="close">&times;</span>
-        </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

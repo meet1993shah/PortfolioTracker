@@ -36,13 +36,13 @@ def init_db():
 def index():
     return render_template('index.html')
 
-@app.route('/add_portfolio_entry', methods=['GET'])
-def get_portfolio_entry():
+@app.route('/add_entry', methods=['GET'])
+def get_add_entry():
     return render_template('add_entry.html')
 
 # Route for adding a new portfolio entry
-@app.route('/add_portfolio_entry', methods=['POST'])
-def add_portfolio_entry():
+@app.route('/add_entry', methods=['POST'])
+def post_add_entry():
     data = request.json
     conn = get_db_connection()
     c = conn.cursor()
@@ -57,25 +57,33 @@ def add_portfolio_entry():
     except sqlite3.IntegrityError:
         return jsonify({'message': 'Error: Entry already exists.'}), 400
 
+@app.route('/update_entry', methods=['GET'])
+def get_update_entry():
+    entry_date = request.args.get('date')
+    return render_template('update_entry.html', entryDate=entry_date)
+
 # API route to update an existing portfolio entry
-@app.route('/update_portfolio_entry', methods=['PUT'])
-def update_portfolio_entry():
+@app.route('/update_entry', methods=['PUT'])
+def put_update_entry():
     data = request.json
     conn = get_db_connection()
     c = conn.cursor()
     try:
+        investment_values = [int(value) for key, value in data['investments'].items()]
+        total_balance = sum(investment_values)
+        investments_json = json.dumps(data['investments'])
         c.execute('''UPDATE portfolio 
                       SET investments=?, balance=?, updated_at=CURRENT_TIMESTAMP 
-                      WHERE entry_time=?''', (data['investments'], data['balance'], data['entry_time']))
+                      WHERE entry_time=?''', (investments_json, total_balance, data['entry_time']))
         conn.commit()
         return jsonify({'message': 'Portfolio entry updated successfully.'}), 200
     except sqlite3.Error:
         return jsonify({'message': 'Error: Unable to update portfolio entry.'}), 500
 
 # API route to delete a portfolio entry
-@app.route('/delete_portfolio_entry', methods=['DELETE'])
-def delete_portfolio_entry():
-    entry_time = request.args.get('entry_time')
+@app.route('/delete_entry', methods=['DELETE'])
+def delete_entry():
+    entry_time = request.args.get('date')
     conn = get_db_connection()
     c = conn.cursor()
     try:
@@ -108,7 +116,7 @@ def add_investment():
         return jsonify({'message': 'Error: Investment already exists.'}), 400
 
 # API route to update an existing investment
-@app.route('/update_investment', methods=['PUT'])
+@app.route('/update_investment', methods=['PATCH'])
 def update_investment():
     data = request.json
     conn = get_db_connection()
@@ -121,17 +129,15 @@ def update_investment():
         return jsonify({'message': 'Error: Unable to update investment.'}), 500
 
 # API route to delete an investment
-@app.route('/delete_investment', methods=['DELETE'])
-def delete_investment():
-    name = request.args.get('name')
-    conn = get_db_connection()
-    c = conn.cursor()
-    try:
-        c.execute('''DELETE FROM investments WHERE name=?''', (name,))
-        conn.commit()
-        return jsonify({'message': 'Investment deleted successfully.'}), 200
-    except sqlite3.Error:
-        return jsonify({'message': 'Error: Unable to delete investment.'}), 500
+# @app.route('/delete_investment', methods=['DELETE'])
+# def delete_investment():
+#     name = request.args.get('name')
+#     conn = get_db_connection()
+#     c = conn.cursor()
+#     try:
+#         # Complete Code
+#     except sqlite3.Error:
+#         # Complete Code
 
 @app.route('/past_entries')
 def get_past_entries():
@@ -176,8 +182,8 @@ def get_last_entry():
     except Exception as e:
         return jsonify({'message': 'Error: Unable to fetch last entry: ' + e}), 500
 
-@app.route('/entry_data', methods=['GET'])
-def get_entry_data():
+@app.route('/get_entry', methods=['GET'])
+def get_entry():
     try:
         entry_date = request.args.get('date')
         conn = get_db_connection()

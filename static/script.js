@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Add event listener to the button
+    // Add event listener to the add_entry button
     document.getElementById('add_entry').addEventListener('click', function() {
         // Make an AJAX request to the /add_portfolio_entry endpoint
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/add_portfolio_entry', true);
+        xhr.open('GET', '/add_entry', true);
         xhr.onload = function() {
             if (xhr.status === 200) {
-                // Redirect to /add_portfolio_entry if the request is successful
-                window.location.href = '/add_portfolio_entry';
+                // Redirect to /add_entry if the request is successful
+                window.location.href = '/add_entry';
             } else {
                 // Handle errors if any
                 console.error('Error:', xhr.statusText);
@@ -20,22 +20,187 @@ document.addEventListener('DOMContentLoaded', function() {
         xhr.send();
     });
 
-	// Add event listeners for investment options
-	document.getElementById('add_account').addEventListener('click', function() {
-	    // Create a modal dialog box
-	    const modal = document.getElementById('modal');
+	// Add event listener to the update_entry button
+	document.getElementById('update_entry').addEventListener('click', function() {
+	    // Create a modal dialog box to fetch the entry date
+	    const modal = document.createElement('div');
+	    modal.setAttribute('class', 'modal');
 	    modal.style.display = 'block';
+	    document.body.appendChild(modal);
 
-	    // Get the close button
-	    const closeButton = document.getElementsByClassName('close')[0];
+	    // Create a modal content
+	    const modalContent = document.createElement('div');
+	    modalContent.setAttribute('class', 'modal-content');
+	    modal.appendChild(modalContent);
+
+	    // Create a form to input the entry date
+	    const form = document.createElement('form');
+	    form.setAttribute('id', 'update-entry-form');
+	    form.setAttribute('class', 'update-entry-form');
+	    modalContent.appendChild(form);
+
+	    // Create input field for investment name
+	    const input = document.createElement('input');
+	    input.setAttribute('type', 'date');
+	    input.setAttribute('id', 'entry-date');
+	    form.appendChild(input);
+
+	    // Create submit button
+	    const submitButton = document.createElement('button');
+	    submitButton.setAttribute('type', 'submit');
+	    submitButton.innerText = 'Submit';
+	    form.appendChild(submitButton);
+
+	    // Create close button
+	    const closeButton = document.createElement('span');
+	    closeButton.setAttribute('class', 'close');
+	    closeButton.innerHTML = '&times;';
+	    modalContent.appendChild(closeButton);
 
 	    // When the user clicks on the close button, close the modal
 	    closeButton.onclick = function() {
-	        modal.style.display = 'none';
+	        document.body.removeChild(modal);
+	    }
+
+	    // On form submission
+	    form.addEventListener('submit', function(event) {
+	        event.preventDefault();
+
+	        // Get the entry date from the form
+	        const entryDate = document.getElementById('entry-date').value;
+
+	        // Redirect to /update_entry if the entry exists
+	        fetch(`/get_entry?date=${entryDate}`)
+	        .then(response => {
+	            if (response.ok) {
+	                window.location.href = '/update_entry?date=' + entryDate;
+	            } else {
+	                throw new Error('No entry data found for the specified date');
+	            }
+	        })
+	        .catch(error => {
+	            console.error('Error fetching entry data:', error);
+	            alert('No entry data found for the specified date');
+	            modal.style.display = 'none';
+	        });
+	    });
+	});
+
+    // Add event listener to the delete_entry button
+    document.getElementById('delete_entry').addEventListener('click', function() {
+        // Create a modal dialog box
+	    const modal = document.createElement('div');
+	    modal.setAttribute('class', 'modal');
+	    modal.style.display = 'block';
+	    document.body.appendChild(modal);
+
+	    // Create a modal content
+	    const modalContent = document.createElement('div');
+	    modalContent.setAttribute('class', 'modal-content');
+	    modal.appendChild(modalContent);
+
+	    // Create a form
+	    const form = document.createElement('form');
+	    form.setAttribute('id', 'delete-entry-form');
+	    form.setAttribute('class', 'delete-entry-form');
+	    modalContent.appendChild(form);
+
+	    // Create input field for investment name
+	    const input = document.createElement('input');
+	    input.setAttribute('type', 'date');
+	    input.setAttribute('id', 'entry-date');
+	    form.appendChild(input);
+
+	    // Create submit button
+	    const submitButton = document.createElement('button');
+	    submitButton.setAttribute('type', 'submit');
+	    submitButton.innerText = 'Submit';
+	    form.appendChild(submitButton);
+
+	    // Create close button
+	    const closeButton = document.createElement('span');
+	    closeButton.setAttribute('class', 'close');
+	    closeButton.innerHTML = '&times;';
+	    modalContent.appendChild(closeButton);
+
+	    // When the user clicks on the close button, close the modal
+	    closeButton.onclick = function() {
+	        document.body.removeChild(modal);
 	    }
 
 	    // Add event listener for form submission
-	    const form = document.getElementById('investment-form');
+	    form.addEventListener('submit', function(event) {
+	        event.preventDefault();
+
+	        // Get the entry date from the form
+	        const entryDate = document.getElementById('entry-date').value;
+
+	        // Send form data to server to delete entry
+	        fetch('/delete_entry?date=' + entryDate, {
+	            method: 'DELETE',
+	            headers: {
+	                'Content-Type': 'application/json'
+	            }
+	        })
+	        .then(response => {
+	            if (response.ok) {
+	                alert('Entry deleted successfully.');
+	                document.body.removeChild(modal);
+	            } else {
+	                throw new Error('Failed to delete entry!');
+	            }
+	        })
+	        .catch(error => {
+	            console.error('Error deleting entry:', error);
+	            alert('Failed to delete entry. Please try again.');
+	        });
+	    });
+    });
+
+	// Add event listeners for investment options
+	document.getElementById('add_investment').addEventListener('click', function() {
+	    // Create a modal dialog box
+	    const modal = document.createElement('div');
+	    modal.setAttribute('class', 'modal');
+	    modal.style.display = 'block';
+	    document.body.appendChild(modal);
+
+	    // Create a modal content
+	    const modalContent = document.createElement('div');
+	    modalContent.setAttribute('class', 'modal-content');
+	    modal.appendChild(modalContent);
+
+	    // Create a form
+	    const form = document.createElement('form');
+	    form.setAttribute('id', 'investment-form');
+	    form.setAttribute('class', 'investment-form');
+	    modalContent.appendChild(form);
+
+	    // Create input field for investment name
+	    const input = document.createElement('input');
+	    input.setAttribute('type', 'text');
+	    input.setAttribute('placeholder', 'Investment Name');
+	    input.setAttribute('id', 'investment-name');
+	    form.appendChild(input);
+
+	    // Create submit button
+	    const submitButton = document.createElement('button');
+	    submitButton.setAttribute('type', 'submit');
+	    submitButton.innerText = 'Submit';
+	    form.appendChild(submitButton);
+
+	    // Create close button
+	    const closeButton = document.createElement('span');
+	    closeButton.setAttribute('class', 'close');
+	    closeButton.innerHTML = '&times;';
+	    modalContent.appendChild(closeButton);
+
+	    // When the user clicks on the close button, close the modal
+	    closeButton.onclick = function() {
+	        document.body.removeChild(modal);
+	    }
+
+	    // Add event listener for form submission
 	    form.addEventListener('submit', function(event) {
 	        event.preventDefault();
 
@@ -55,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	        .then(response => {
 	            if (response.ok) {
 	                alert('Investment added successfully.');
-	                modal.style.display = 'none';
+	                document.body.removeChild(modal);
 	            } else {
 	                throw new Error('Failed to add investment.');
 	            }
@@ -65,11 +230,90 @@ document.addEventListener('DOMContentLoaded', function() {
 	            alert('Failed to add investment. Please try again.');
 	        });
 	    });
+	});
 
-	    // Add event listener for cancel button
-	    const cancelButton = document.getElementById('cancel-button');
-	    cancelButton.addEventListener('click', function() {
-	        modal.style.display = 'none';
+	// Add event listeners for investment options
+	document.getElementById('update_investment').addEventListener('click', function() {
+	    // Create a modal dialog box
+	    const modal = document.createElement('div');
+	    modal.setAttribute('class', 'modal');
+	    modal.style.display = 'block';
+	    document.body.appendChild(modal);
+
+	    // Create a modal content
+	    const modalContent = document.createElement('div');
+	    modalContent.setAttribute('class', 'modal-content');
+	    modal.appendChild(modalContent);
+
+	    // Create a form
+	    const form = document.createElement('form');
+	    form.setAttribute('id', 'investment-update-form');
+	    form.setAttribute('class', 'investment-update-form');
+	    modalContent.appendChild(form);
+
+	    const oldNameInput = document.createElement('input');
+	    oldNameInput.setAttribute('type', 'text');
+	    oldNameInput.setAttribute('placeholder', 'Old Investment Name');
+	    form.appendChild(oldNameInput);
+
+	    const newNameInput = document.createElement('input');
+	    newNameInput.setAttribute('type', 'text');
+	    newNameInput.setAttribute('placeholder', 'New Investment Name');
+	    form.appendChild(newNameInput);
+
+	    // Create submit button
+	    const submitButton = document.createElement('button');
+	    submitButton.setAttribute('type', 'submit');
+	    submitButton.innerText = 'Submit';
+	    form.appendChild(submitButton);
+
+	    // Create close button
+	    const closeButton = document.createElement('span');
+	    closeButton.setAttribute('class', 'close');
+	    closeButton.innerHTML = '&times;';
+	    modalContent.appendChild(closeButton);
+
+	    // When the user clicks on the close button, close the modal
+	    closeButton.onclick = function() {
+	        document.body.removeChild(modal);
+	    }
+
+	    // On submit ask for confirmation
+	    form.addEventListener('submit', function(event) {
+	        event.preventDefault();
+	        const oldName = oldNameInput.value.trim();
+	        const newName = newNameInput.value.trim();
+	        if (oldName === '' || newName === '') {
+	            alert('Please fill in both fields.');
+	            return;
+	        }
+	        if (confirm(`Are you sure you want to update '${oldName}' to '${newName}'?`)) {
+	            // Send PATCH request to update investment
+	            fetch('/update_investment', {
+	                method: 'PATCH',
+	                headers: {
+	                    'Content-Type': 'application/json'
+	                },
+	                body: JSON.stringify({
+	                    existing_name: oldName,
+	                    new_name: newName
+	                })
+	            })
+	            .then(response => {
+	                if (!response.ok) {
+	                    throw new Error('Failed to update investment');
+	                }
+	                return response.json();
+	            })
+	            .then(data => {
+	                alert(data.message);
+	                modal.remove(); // Remove modal after updating
+	            })
+	            .catch(error => {
+	                console.error('Error updating investment:', error);
+	                alert('Failed to update investment. Please try again.');
+	            });
+	        }
 	    });
 	});
 
@@ -149,7 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	        const entryDate = document.getElementById('entry-date').value;
 
 	        // Fetch data for the specified entry date
-	        fetch('/entry_data?date=' + entryDate)
+	        fetch('/get_entry?date=' + entryDate)
 	            .then(response => {
 	                if (!response.ok) {
 	                    throw new Error('Failed to fetch data for the specified date');

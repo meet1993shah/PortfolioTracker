@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Portfolio Entry</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='update_entry_styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="panel-header">
+            <h3>Update Portfolio Entry Form</h3>
+        </div>
+        <div class="form-container">
+            <form id="update-entry-form">
+                <input type="date" id="entryTimeInput" value="{{ entryDate }}">
+                <div id="investmentsContainer"></div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='update_entry_script.js') }}"></script>
+</body>
+</html>
