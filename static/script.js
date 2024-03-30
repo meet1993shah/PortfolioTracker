@@ -317,6 +317,78 @@ document.addEventListener('DOMContentLoaded', function() {
 	    });
 	});
 
+	// Add event listener to the delete_investment button
+    document.getElementById('delete_investment').addEventListener('click', function() {
+        // Create a modal dialog box
+	    const modal = document.createElement('div');
+	    modal.setAttribute('class', 'modal');
+	    modal.style.display = 'block';
+	    document.body.appendChild(modal);
+
+	    // Create a modal content
+	    const modalContent = document.createElement('div');
+	    modalContent.setAttribute('class', 'modal-content');
+	    modal.appendChild(modalContent);
+
+	    // Create a form
+	    const form = document.createElement('form');
+	    form.setAttribute('id', 'delete-investment-form');
+	    form.setAttribute('class', 'delete-investment-form');
+	    modalContent.appendChild(form);
+
+	    // Create input field for investment name
+	    const input = document.createElement('input');
+	    input.setAttribute('type', 'text');
+	    input.setAttribute('id', 'investment-name');
+	    input.setAttribute('placeholder', 'Account Name');
+	    form.appendChild(input);
+
+	    // Create submit button
+	    const submitButton = document.createElement('button');
+	    submitButton.setAttribute('type', 'submit');
+	    submitButton.innerText = 'Submit';
+	    form.appendChild(submitButton);
+
+	    // Create close button
+	    const closeButton = document.createElement('span');
+	    closeButton.setAttribute('class', 'close');
+	    closeButton.innerHTML = '&times;';
+	    modalContent.appendChild(closeButton);
+
+	    // When the user clicks on the close button, close the modal
+	    closeButton.onclick = function() {
+	        document.body.removeChild(modal);
+	    }
+
+	    // Add event listener for form submission
+	    form.addEventListener('submit', function(event) {
+	        event.preventDefault();
+
+	        // Get the entry date from the form
+	        const investmentName = document.getElementById('investment-name').value;
+
+	        // Send form data to server to delete entry
+	        fetch('/delete_investment?name=' + investmentName, {
+	            method: 'DELETE',
+	            headers: {
+	                'Content-Type': 'application/json'
+	            }
+	        })
+	        .then(response => {
+	            if (response.ok) {
+	                alert('Investment account deleted successfully.');
+	                document.body.removeChild(modal);
+	            } else {
+	                throw new Error('Failed to delete investment account!');
+	            }
+	        })
+	        .catch(error => {
+	            console.error('Error deleting investment account:', error);
+	            alert('Failed to delete investment account. Please try again.');
+	        });
+	    });
+    });
+
 	// Add event listener for past entries
 	document.getElementById('past_entries').addEventListener('click', function() {
 		const displaySection = document.querySelector('.display');

@@ -128,16 +128,55 @@ def update_investment():
     except sqlite3.Error:
         return jsonify({'message': 'Error: Unable to update investment.'}), 500
 
+class UserException(Exception):
+    """Custom exception for user-related errors in the API."""
+    def __init__(self, message):
+        super().__init__(message)
+
 # API route to delete an investment
-# @app.route('/delete_investment', methods=['DELETE'])
-# def delete_investment():
-#     name = request.args.get('name')
-#     conn = get_db_connection()
-#     c = conn.cursor()
-#     try:
-#         # Complete Code
-#     except sqlite3.Error:
-#         # Complete Code
+@app.route('/delete_investment', methods=['DELETE'])
+def delete_investment():
+    name = request.args.get('name')
+    conn = get_db_connection()
+    c = conn.cursor()
+    try:
+        # Get the investment id from investment name
+        c.execute('''SELECT id FROM investments WHERE name=?''', (name,))
+        inv_id = str(c.fetchall()[0]['id'])
+        # Get all portfolio entries
+        c.execute('''SELECT id, entry_time, investments FROM portfolio''')
+        past_entries = c.fetchall()
+        # For each entry
+        for row in past_entries:
+            entry_dict = dict(row)
+            entry_id = entry_dict['id']
+            entry_date = entry_dict['entry_time']
+            entry_investments = json.loads(entry_dict['investments'])
+            # check if the investment id key exists
+            if inv_id in entry_investments:
+                # If the investment is non-zero then raise exception
+                if int(entry_investments[inv_id]) != 0:
+                    raise UserException(f"{entry_date} still uses {name}")
+                # Else if its zero then update the entry
+                else:
+                    del entry_investments[inv_id]
+                    investments_json = json.dumps(entry_investments)
+                    c.execute('''UPDATE portfolio 
+                      SET investments=?, updated_at=CURRENT_TIMESTAMP 
+                      WHERE id=?''', (investments_json, entry_id))
+        # Delete the investment from the table
+        c.execute('''DELETE FROM investments WHERE name=?''', (name,))
+        conn.commit()
+        return jsonify({'message': 'Investment deleted successfully.'}), 200
+    except sqlite3.Error:
+        conn.rollback()
+        return jsonify({'message': 'Error: Unable to delete investment due to sql error.'}), 500
+    except UserException:
+        conn.rollback()
+        return jsonify({'message': 'Error: Unable to delete investment due to user error.'}), 400
+    except Exception:
+        conn.rollback()
+        return jsonify({'message': 'Error: Unable to delete investment due to internal server error.'}), 500
 
 @app.route('/past_entries')
 def get_past_entries():
