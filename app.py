@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, g, send_from_directory
 import sqlite3
-from utils import get_projections
+from utils import get_projections, upload_to_store, download_from_store
 import json
 import os
 
@@ -231,6 +231,23 @@ def get_projection():
         return jsonify(res), 200
     except Exception as e:
         return jsonify({'message': 'Error: Unable to load projection: ' + str(e)}), 500
+
+# Route for uploading the database.db file to Google Drive
+@app.route('/export', methods=['POST'])
+def export_db():
+    try:
+        upload_to_store()
+        return jsonify({'message': 'File exported successfully.'}), 200
+    except Exception as e:
+        return jsonify({'message': 'Error exporting file: ' + str(e)}), 500
+
+@app.route('/import', methods=['POST'])
+def import_db():
+    try:
+        download_from_store()
+        return jsonify({'message': 'File imported successfully.'}), 200
+    except Exception as e:
+        return jsonify({'message': 'Error importing file: ' + str(e)}), 500
 
 @app.route('/favicon.ico')
 def favicon():

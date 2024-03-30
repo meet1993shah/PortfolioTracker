@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.optimize import curve_fit
 from datetime import datetime, timedelta
+from google.cloud import storage
 
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -33,3 +34,22 @@ def get_projections(X_date, Y_in):
     Y_res = Y_in + Y_proj
 
     return X_res_in, X_res_date, Y_res
+
+# Function to upload the database.db file to Google Cloud Storage
+def upload_to_store():
+    client = storage.Client.from_service_account_json('desktop-app-client.json')
+    bucket_name = 'meet1993shah-portfoliotracker-db'
+    file_path = 'database.db'
+    bucket = client.get_bucket(bucket_name)
+    blob = bucket.blob('database.db')
+    blob.upload_from_filename(file_path)
+
+# Function to download the database.db file from Google Cloud Storage
+def download_from_store():
+    client = storage.Client.from_service_account_json('desktop-app-client.json')
+    bucket_name = 'meet1993shah-portfoliotracker-db'
+    blob_name = 'database.db'
+    bucket = client.get_bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+    download_path = 'database.db'
+    blob.download_to_filename(download_path)

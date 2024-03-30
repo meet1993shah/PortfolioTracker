@@ -560,4 +560,38 @@ document.addEventListener('DOMContentLoaded', function() {
         const displaySection = document.querySelector('.display');
         displaySection.innerHTML = ''; // Clear the display content
     });
+
+    document.getElementById('export_data').addEventListener('click', function() {
+        fetch('/export', {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('File exported successfully.');
+            } else {
+                throw new Error('Failed to export file.');
+            }
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error);
+            alert('Failed to upload file to online store. Please try again.');
+        });
+    });
+
+    document.getElementById('import_data').addEventListener('click', function() {
+        fetch('/import', {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('File imported successfully.');
+            } else {
+                throw new Error('Failed to import file.');
+            }
+        })
+        .catch(error => {
+            console.error('Error downloading file:', error);
+            alert('Failed to download file from online store. Please try again.');
+        });
+    });
 });
