@@ -3,6 +3,7 @@ import sqlite3
 from utils import get_projections, upload_to_store, download_from_store
 import json
 import os
+from waitress import serve
 
 app = Flask(__name__)
 
@@ -295,4 +296,4 @@ def favicon():
 
 if __name__ == '__main__':
     init_db() # Ensure the database is initialized
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=443, ssl_context="adhoc")

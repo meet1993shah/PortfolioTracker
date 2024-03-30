@@ -18,7 +18,7 @@ The Portfolio Tracker App is a simple yet powerful application designed to help 
 
 * Completely offline, so minimal risk of data breach
 
-* DB Migrations
+* Sync to Google Cloud Storage for import/export of database if needed
 
 * Mobile application 
 
