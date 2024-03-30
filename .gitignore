@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Client Secret
+desktop-app-client.json
+
+# Database file
+*.db
+
 # C extensions
 *.so
 
