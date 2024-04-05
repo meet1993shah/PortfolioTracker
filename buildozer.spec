@@ -22,7 +22,7 @@ source.include_patterns = static/*,templates/*,utils.py,schema.sql,main.py,gcp-s
 #source.exclude_exts = spec
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-source.exclude_dirs = tests, bin, venv
+source.exclude_dirs = tests, bin, venv, example_images
 
 # (list) List of exclusions using pattern matching
 # Do not prefix with './'

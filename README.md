@@ -8,31 +8,47 @@ The Portfolio Tracker App is a simple yet powerful application designed to help 
 
 * **Add New Accounts:** Users can easily create new account names
 
-![Create a new Account](./example_images/add_account.png)
+![Create a new Account - 1](./example_images/add_account_1.png)
+
+![Create a new Account - 2](./example_images/add_account_2.png)
 
 * **Update Account Name:** Users can easily update any existing account name
 
-![Update Account](./example_images/update_account.png)
+![Update Account - 1](./example_images/update_account_1.png)
+
+![Update Account - 2](./example_images/update_account_2.png)
 
 * **Delete Account:** Users can also delete account if needed, however this will fail if any existing entry is using the account name
 
-![Delete Account](./example_images/delete_account.png)
+![Delete Account - 1](./example_images/delete_account_1.png)
+
+![Delete Account - 2](./example_images/delete_account_2.png)
 
 * **Add New Portfolio Entry:** Users can easily add a new portfolio entry
 
-![Add Entry](./example_images/add_entry.png)
+![Add Entry - 1](./example_images/add_entry_1.png)
+
+![Add Entry - 2](./example_images/add_entry_2.png)
 
 * **Update Existing Entry:** Users can easily update any existing entry
 
-![Update Entry](./example_images/update_entry.png)
+![Update Entry - 1](./example_images/update_entry_1.png)
+
+![Update Entry - 2](./example_images/update_entry_2.png)
+
+![Update Entry - 3](./example_images/update_entry_3.png)
 
 * **Delete Existing Entry:** Users can also delete an entry if needed
 
-![Delete Entry](./example_images/delete_entry.png)
+![Delete Entry - 1](./example_images/delete_entry_1.png)
+
+![Delete Entry - 2](./example_images/delete_entry_2.png)
 
 * **Pie Chart:** Users can create pie chart for any past portfolio entry and view the distribution
 
-![Pie Chart](./example_images/pie_chart.png)
+![Pie Chart - 1](./example_images/pie_chart_1.png)
+
+![Pie Chart - 2](./example_images/pie_chart_2.png)
 
 * **Projection:** Users can view future projected growth based on the current entries
 
@@ -44,7 +60,9 @@ The Portfolio Tracker App is a simple yet powerful application designed to help 
 
 * **FI/RE Calculator:**  Users can get an estimate for FI/RE
 
-![FIRE Calculator](./example_images/fire_calculator.png)
+![FIRE Calculator - 1](./example_images/fire_calculator_1.png)
+
+![FIRE Calculator - 2](./example_images/fire_calculator_2.png)
 
 * **Import DB from GCP:** Users can import DB from GCP
 
