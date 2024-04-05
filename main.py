@@ -48,7 +48,7 @@ def post_add_entry():
     conn = get_db_connection()
     c = conn.cursor()
     try:
-        investment_values = [float(value) for key, value in data['investments'].items()]
+        investment_values = [round(float(value), 2) for key, value in data['investments'].items()]
         total_balance = sum(investment_values)
         investments_json = json.dumps(data['investments'])
         c.execute('''INSERT INTO portfolio (entry_time, investments, balance)
@@ -70,7 +70,7 @@ def put_update_entry():
     conn = get_db_connection()
     c = conn.cursor()
     try:
-        investment_values = [float(value) for key, value in data['investments'].items()]
+        investment_values = [round(float(value), 2) for key, value in data['investments'].items()]
         total_balance = sum(investment_values)
         investments_json = json.dumps(data['investments'])
         c.execute('''UPDATE portfolio 

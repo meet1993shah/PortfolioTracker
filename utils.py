@@ -65,15 +65,15 @@ def get_projections(X_date, Y_in):
 
 def calculate_fire(X_date, Y_in, annual_expense, tax_rate, swr):
     fire_data = []
-    fire_data.append({"field": "Annual Expenses Without Taxes", "value": annual_expense})
-    fire_data.append({"field": "Effective Tax Rate in Retirement", "value": tax_rate})
-    fire_data.append({"field": "Safe Withdrawal Rate", "value": swr})
+    fire_data.append({"field": "Annual Expenses Without Taxes($)", "value": round(annual_expense, 2)})
+    fire_data.append({"field": "Effective Tax Rate in Retirement(%)", "value": round(tax_rate, 2)})
+    fire_data.append({"field": "Safe Withdrawal Rate(%)", "value": round(swr, 2)})
     
     annual_expense_with_tax = (annual_expense * 100.0) / (100.0 - tax_rate)
-    fire_data.append({"field": "Annual Expenses With Taxes", "value": annual_expense_with_tax})
+    fire_data.append({"field": "Annual Expenses With Taxes($)", "value": round(annual_expense_with_tax, 2)})
 
     net_worth_needed = 100.0 * annual_expense_with_tax / swr
-    fire_data.append({"field": "Net Worth Needed to Retire", "value": net_worth_needed})
+    fire_data.append({"field": "Net Worth Needed to Retire($)", "value": round(net_worth_needed, 2)})
 
     X_in = []
     start_date = datetime.strptime(X_date[0], DATE_FORMAT)
@@ -85,10 +85,10 @@ def calculate_fire(X_date, Y_in, annual_expense, tax_rate, swr):
     x = inverse_model_func(net_worth_needed, a_opt, b_opt)
     x_approx = int(x+1.0)
     re_date = (start_date + timedelta(days=x_approx)).date().strftime(DATE_FORMAT)
-    fire_data.append({"field": "Estimated Date of Retirement", "value": re_date})
+    fire_data.append({"field": "Estimated Date of Retirement(yyyy-mm-dd)", "value": re_date})
 
     y_estimate = model_func(x_approx, a_opt, b_opt)
-    fire_data.append({"field": "Estimated Net Worth at Retirement", "value": y_estimate})
+    fire_data.append({"field": "Estimated Net Worth at Retirement($)", "value": round(y_estimate, 2)})
 
     return fire_data
 
