@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const input = document.createElement('input');
                 input.setAttribute('type', 'number');
+                input.setAttribute('step', '0.01');
                 input.setAttribute('placeholder', 'Enter amount');
                 input.setAttribute('data-investment-id', key);
                 input.value = investmentIdToValueMap.get(key);

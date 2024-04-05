@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, jsonify, g, send_from_directory
 import sqlite3
-from utils import get_projections, upload_to_store, download_from_store
+from utils import get_projections, upload_to_store, download_from_store, calculate_fire
 import json
 import os
+import platform
 
 app = Flask(__name__)
 
@@ -47,7 +48,7 @@ def post_add_entry():
     conn = get_db_connection()
     c = conn.cursor()
     try:
-        investment_values = [int(value) for key, value in data['investments'].items()]
+        investment_values = [float(value) for key, value in data['investments'].items()]
         total_balance = sum(investment_values)
         investments_json = json.dumps(data['investments'])
         c.execute('''INSERT INTO portfolio (entry_time, investments, balance)
@@ -69,7 +70,7 @@ def put_update_entry():
     conn = get_db_connection()
     c = conn.cursor()
     try:
-        investment_values = [int(value) for key, value in data['investments'].items()]
+        investment_values = [float(value) for key, value in data['investments'].items()]
         total_balance = sum(investment_values)
         investments_json = json.dumps(data['investments'])
         c.execute('''UPDATE portfolio 
@@ -155,7 +156,7 @@ def delete_investment():
             # check if the investment id key exists
             if inv_id in entry_investments:
                 # If the investment is non-zero then raise exception
-                if int(entry_investments[inv_id]) != 0:
+                if float(entry_investments[inv_id]) > 0:
                     raise UserException(f"{entry_date} still uses {name}")
                 # Else if its zero then update the entry
                 else:
@@ -219,7 +220,7 @@ def get_last_entry():
         del entry_dict['investments']
         return jsonify(entry_dict), 200
     except Exception as e:
-        return jsonify({'message': 'Error: Unable to fetch last entry: ' + e}), 500
+        return jsonify({'message': 'Error: Unable to fetch last entry: ' + repr(e)}), 500
 
 @app.route('/get_entry', methods=['GET'])
 def get_entry():
@@ -250,7 +251,7 @@ def get_entry():
         else:
             return jsonify({'message': 'No entry data found for the specified date'}), 404
     except Exception as e:
-        return jsonify({'message': 'Error: Unable to fetch entry data: ' + str(e)}), 500
+        return jsonify({'message': 'Error: Unable to fetch entry data: ' + repr(e)}), 500
 
 @app.route('/projection', methods=['GET'])
 def get_projection():
@@ -269,7 +270,23 @@ def get_projection():
         res['Y_data'] = y_res
         return jsonify(res), 200
     except Exception as e:
-        return jsonify({'message': 'Error: Unable to load projection: ' + str(e)}), 500
+        return jsonify({'message': 'Error: Unable to load projection: ' + repr(e)}), 500
+
+# API route to update an existing investment
+@app.route('/fire_calculator', methods=['POST'])
+def fire_calculator():
+    data = request.json
+    conn = get_db_connection()
+    c = conn.cursor()
+    try:
+        c.execute('''SELECT entry_time, balance FROM portfolio ORDER BY entry_time ASC''')
+        balance_data = [dict(row) for row in c.fetchall()]
+        X = [row['entry_time'] for row in balance_data]
+        Y = [row['balance'] for row in balance_data]
+        fire_data = calculate_fire(X, Y, float(data["annual_expense"]), float(data["tax_rate"]), float(data["safe_withdrawal_rate"]))
+        return jsonify(fire_data), 200
+    except sqlite3.Error:
+        return jsonify({'message': 'Error: Unable to fetch entry data'}), 500
 
 # Route for uploading the database.db file to Google Drive
 @app.route('/export', methods=['POST'])
@@ -278,7 +295,7 @@ def export_db():
         upload_to_store()
         return jsonify({'message': 'File exported successfully.'}), 200
     except Exception as e:
-        return jsonify({'message': 'Error exporting file: ' + str(e)}), 500
+        return jsonify({'message': f'Error exporting file: {repr(e)}'}), 500
 
 @app.route('/import', methods=['POST'])
 def import_db():
@@ -286,13 +303,15 @@ def import_db():
         download_from_store()
         return jsonify({'message': 'File imported successfully.'}), 200
     except Exception as e:
-        return jsonify({'message': 'Error importing file: ' + str(e)}), 500
+        return jsonify({'message': f'Error importing file: {repr(e)}'}), 500
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-        'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(os.getcwd()+'/static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == '__main__':
+    if platform.system() == 'Android':
+        from android.permissions import Permission, request_permissions
+        request_permissions([Permission.INTERNET, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
     init_db() # Ensure the database is initialized
-    app.run(host="0.0.0.0", port=443, ssl_context="adhoc")
+    app.run(debug=False, port=8080)

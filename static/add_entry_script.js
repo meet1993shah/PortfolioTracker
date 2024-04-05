@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 label.textContent = investment.name;
                 const input = document.createElement('input');
                 input.setAttribute('type', 'number');
+                input.setAttribute('step', '0.01');
                 input.setAttribute('placeholder', 'Enter amount');
                 input.setAttribute('data-investment-id', investment.id);
                 investmentsContainer.appendChild(label);

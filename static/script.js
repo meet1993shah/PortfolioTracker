@@ -396,50 +396,50 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	    // Display past entries in a table under the .display section
 	    fetch('/past_entries')
-	        .then(response => response.json())
-	        .then(data => {
-	            // Create a table to display past entries
-	            const table = document.createElement('table');
-	            table.classList.add('past-entries-table');
+        .then(response => response.json())
+        .then(data => {
+            // Create a table to display past entries
+            const table = document.createElement('table');
+            table.classList.add('past-entries-table');
 
-	            // Create table headers
-	            const headerRow = table.insertRow();
-	            const headers = ['Date', 'Balance']; // Initial headers for Date and Balance columns
-	            const investmentColumns = {}; // Object to store investment names as columns
-	            data.forEach(entry => {
-	                // Extract investment names from each entry
-	                Object.keys(entry).forEach(key => {
-	                    if (key !== 'entry_time' && key !== 'balance' && key !== 'id') {
-	                        investmentColumns[key] = true; // Store unique investment names as columns
-	                    }
-	                });
-	            });
-	            headers.splice(1, 0, ...Object.keys(investmentColumns)); // Add investment names between Date and Balance
+            // Create table headers
+            const headerRow = table.insertRow();
+            const headers = ['Date', 'Balance']; // Initial headers for Date and Balance columns
+            const investmentColumns = {}; // Object to store investment names as columns
+            data.forEach(entry => {
+                // Extract investment names from each entry
+                Object.keys(entry).forEach(key => {
+                    if (key !== 'entry_time' && key !== 'balance' && key !== 'id') {
+                        investmentColumns[key] = true; // Store unique investment names as columns
+                    }
+                });
+            });
+            headers.splice(1, 0, ...Object.keys(investmentColumns)); // Add investment names between Date and Balance
 
-	            // Add headers to the table
-	            headers.forEach(headerText => {
-	                const header = document.createElement('th');
-	                header.textContent = headerText;
-	                headerRow.appendChild(header);
-	            });
+            // Add headers to the table
+            headers.forEach(headerText => {
+                const header = document.createElement('th');
+                header.textContent = headerText;
+                headerRow.appendChild(header);
+            });
 
-	            // Populate table with past entries
-	            data.forEach(entry => {
-	                const row = table.insertRow();
-	                headers.forEach(headerText => {
-	                    const cell = row.insertCell();
-	                    if (headerText === 'Date') {
-	                        cell.textContent = entry['entry_time']; // Date column
-	                    } else if (headerText === 'Balance') {
-	                        cell.textContent = entry['balance']; // Balance column
-	                    } else if (headerText !== 'id') {
-	                        cell.textContent = entry[headerText] || ''; // Investment value columns
-	                    }
-	                });
-	            });
-	            displaySection.appendChild(table);
-	        })
-	        .catch(error => console.error('Error fetching past entries:', error));
+            // Populate table with past entries
+            data.forEach(entry => {
+                const row = table.insertRow();
+                headers.forEach(headerText => {
+                    const cell = row.insertCell();
+                    if (headerText === 'Date') {
+                        cell.textContent = entry['entry_time']; // Date column
+                    } else if (headerText === 'Balance') {
+                        cell.textContent = entry['balance']; // Balance column
+                    } else if (headerText !== 'id') {
+                        cell.textContent = entry[headerText] || ''; // Investment value columns
+                    }
+                });
+            });
+            displaySection.appendChild(table);
+        })
+        .catch(error => console.error('Error fetching past entries:', error));
 	});
 
 	// Add event listener for Pie Chart
@@ -451,9 +451,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	    const form = document.createElement('form');
 	    form.classList.add('entry-form');
 	    form.innerHTML = `
-	        <label for="entry-date">Enter Entry Date:</label>
-	        <input type="date" id="entry-date" required>
-	        <button type="submit">Submit</button>
+	    	<div>
+	        	<label for="entry-date">Enter Entry Date:</label>
+	        	<input type="date" id="entry-date" required>
+	        </div>
+	    	<br>
+	    	<div>
+	        	<button type="submit">Submit</button>
+	        </div>
 	    `;
 	    displaySection.appendChild(form);
 
@@ -466,78 +471,78 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	        // Fetch data for the specified entry date
 	        fetch('/get_entry?date=' + entryDate)
-	            .then(response => {
-	                if (!response.ok) {
-	                    throw new Error('Failed to fetch data for the specified date');
-	                }
-	                return response.json();
-	            })
-	            .then(data => {
-	                // Extract labels and values from the data
-	                const labels = Object.keys(data);
-	                const values = Object.values(data);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data for the specified date');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Extract labels and values from the data
+                const labels = Object.keys(data);
+                const values = Object.values(data);
 
-	                // Create a canvas element for the pie chart
-	                const canvas = document.createElement('canvas');
-	                canvas.setAttribute('id', 'pieChart');
-	                canvas.style.backgroundColor = 'seagreen';
-	                displaySection.appendChild(canvas);
+                // Create a canvas element for the pie chart
+                const canvas = document.createElement('canvas');
+                canvas.setAttribute('id', 'pieChart');
+                canvas.style.backgroundColor = 'seagreen';
+                displaySection.appendChild(canvas);
 
-	                // Use Chart.js to draw the pie chart
-	                new Chart(canvas, {
-	                    type: 'pie',
-	                    data: {
-	                        labels: labels,
-	                        datasets: [{
-	                            data: values,
-	                            backgroundColor: [
-	                                'red',
-	                                'yellow',
-	                                'blue',
-	                                'green',
-	                                'orange',
-	                                'white',
-	                                'purple',
-	                                'lime',
-	                                'pink',
-	                                'gray',
-	                                'violet'
-	                                // Add more colors if needed
-	                            ],
-	                            borderColor: [
-	                                'black'
-	                            ],
-	                            borderWidth: 2
-	                        }]
-	                    },
-	                    options: {
-	                        responsive: true,
-	                        title: {
-	                            display: true,
-	                            text: 'Investment Distribution (Pie Chart)',
-	                        },
-                            plugins: {
-					            legend: {
-					                labels: {
-					                    font: {
-					                        size: 14,
-					                        weight: 'bold',
-					                    },
-					                    color: 'white'
-					                }
-					            }
-					        }
-	                    }
-	                });
-	            })
-	            .catch(error => {
-	                console.error('Error fetching data for the specified date:', error);
-	                alert('Failed to fetch data for the specified date. Please try again.');
-	            })
-	            .finally(() => {
-	                // Hide the form after submission
-	                form.style.display = 'none';
-            	});
+                // Use Chart.js to draw the pie chart
+                new Chart(canvas, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: [
+                                'red',
+                                'yellow',
+                                'blue',
+                                'green',
+                                'orange',
+                                'white',
+                                'purple',
+                                'lime',
+                                'pink',
+                                'gray',
+                                'violet'
+                                // Add more colors if needed
+                            ],
+                            borderColor: [
+                                'black'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: 'Investment Distribution (Pie Chart)',
+                        },
+                        plugins: {
+				            legend: {
+				                labels: {
+				                    font: {
+				                        size: 14,
+				                        weight: 'bold',
+				                    },
+				                    color: 'white'
+				                }
+				            }
+				        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data for the specified date:', error);
+                alert('Failed to fetch data for the specified date. Please try again.');
+            })
+            .finally(() => {
+                // Hide the form after submission
+                form.style.display = 'none';
+        	});
 	    });
 	});
 
@@ -548,83 +553,181 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	    // Fetch projection data from the server
 	    fetch('/projection')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch projection data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const xData = data['X_data'];
+            const xLabels = data['X_labels'];
+            const yData = data['Y_data'];
+
+            // Create canvas element for the line chart
+            const canvas = document.createElement('canvas');
+            canvas.setAttribute('id', 'lineChart');
+            canvas.style.backgroundColor = 'seagreen';
+            displaySection.appendChild(canvas);
+
+            // Use Chart.js to draw the line chart
+            new Chart(canvas, {
+                type: 'line',
+                data: {
+                	labels: xLabels,
+                    datasets: [{
+                        label: 'Balance',
+                        data: yData,
+                        fill: true,
+                        borderColor: 'green', // Color of the line
+                        backgroundColor: 'lightgreen',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Balance Projection Over Time',
+                        fontSize: 14,
+                        fontColor: 'red',
+                        fontWeight: 'bold'
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold',
+                                },
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                        	grid: {
+                                color: 'white'
+                            },
+                            ticks: {
+                                color: 'white',
+                            }
+                        },
+                        y: {
+                        	type: 'logarithmic',
+                            grid: {
+                                color: 'white'
+                            },
+                            ticks: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching projection data:', error);
+            alert('Failed to fetch projection data. Please try again.');
+        });
+	});
+
+	// Add event listener for FI/RE Calculator
+	document.getElementById('fire_calculator').addEventListener('click', function() {
+	    const displaySection = document.querySelector('.display');
+	    displaySection.innerHTML = ''; // Clear previous content
+
+	    // Create a form to input the entry date
+	    const form = document.createElement('form');
+	    form.classList.add('entry-form');
+	    form.innerHTML = `
+	    	<div>
+		    	<label for="annual-expense">Annual Expense in Retirement($):</label>
+		        <input type="number" step="0.01" id="annual-expense" required>
+		    </div>
+		    <br>
+		    <div>
+		        <label for="tax-rate">Effective Tax Rate in Retirement(%):</label>
+		        <input type="number" step="0.01" id="tax-rate" required>
+		    </div>
+		    <br>
+		    <div>
+		        <label for="swr">Safe Withdrawal Rate(%):</label>
+		        <input type="number" step="0.01" id="swr" required>
+		    </div>
+		    <br>
+		    <div>
+	        	<button type="submit">Submit</button>
+	        </div>
+	    `;
+	    displaySection.appendChild(form);
+
+	    // Add event listener for form submission
+	    form.addEventListener('submit', function(event) {
+	        event.preventDefault();
+
+	        // Get the entry date from the form
+	        const annualExpense = document.getElementById('annual-expense').value;
+	        const taxRate = document.getElementById('tax-rate').value;
+	        const swr = document.getElementById('swr').value;
+
+	        // Fetch data for the specified entry date
+	        fetch('/fire_calculator', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    annual_expense: annualExpense,
+                    tax_rate: taxRate,
+                    safe_withdrawal_rate: swr
+                })
+            })
 	        .then(response => {
 	            if (!response.ok) {
-	                throw new Error('Failed to fetch projection data');
+	                throw new Error('Failed to fetch FIRE data');
 	            }
 	            return response.json();
 	        })
-	        .then(data => {
-	            const xData = data['X_data'];
-	            const xLabels = data['X_labels'];
-	            const yData = data['Y_data'];
+            .then(data => {
+            	// Create a table to display past entries
+	            const table = document.createElement('table');
+	            table.classList.add('FIRE-Calculator');
 
-	            // Create canvas element for the line chart
-	            const canvas = document.createElement('canvas');
-	            canvas.setAttribute('id', 'lineChart');
-	            canvas.style.backgroundColor = 'seagreen';
-	            displaySection.appendChild(canvas);
+	            // Create table headers
+	            const headerRow = table.insertRow();
+	            const headers = ['FI/RE Field', 'FI/RE Value'];
 
-	            // Use Chart.js to draw the line chart
-	            new Chart(canvas, {
-	                type: 'line',
-	                data: {
-	                	labels: xLabels,
-	                    datasets: [{
-	                        label: 'Balance',
-	                        data: yData,
-	                        fill: true,
-	                        borderColor: 'green', // Color of the line
-	                        backgroundColor: 'lightgreen',
-	                        borderWidth: 2
-	                    }]
-	                },
-	                options: {
-	                    responsive: true,
-	                    title: {
-	                        display: true,
-	                        text: 'Balance Projection Over Time',
-	                        fontSize: 14,
-	                        fontColor: 'red',
-	                        fontWeight: 'bold'
-	                    },
-	                    plugins: {
-	                        legend: {
-	                            labels: {
-	                                font: {
-	                                    size: 14,
-	                                    weight: 'bold',
-	                                },
-	                                color: 'white'
-	                            }
-	                        }
-	                    },
-	                    scales: {
-	                        x: {
-	                        	grid: {
-	                                color: 'white'
-	                            },
-	                            ticks: {
-	                                color: 'white',
-	                            }
-	                        },
-	                        y: {
-	                        	type: 'logarithmic',
-	                            grid: {
-	                                color: 'white'
-	                            },
-	                            ticks: {
-	                                color: 'white'
-	                            }
-	                        }
-	                    }
-	                }
+	            // Add headers to the table
+	            headers.forEach(headerText => {
+	                const header = document.createElement('th');
+	                header.textContent = headerText;
+	                headerRow.appendChild(header);
 	            });
+
+	            // Populate table with past entries
+	            data.forEach(entry => {
+	            	const row = table.insertRow();
+	                headers.forEach(headerText => {
+	                    const cell = row.insertCell();
+	                    if (headerText === 'FI/RE Field') {
+	                        cell.textContent = entry['field'];
+	                    } else if (headerText === 'FI/RE Value') {
+	                        cell.textContent = entry['value'];
+	                    }
+	                });
+	            });
+	            displaySection.appendChild(table);
 	        })
-	        .catch(error => {
-	            console.error('Error fetching projection data:', error);
-	            alert('Failed to fetch projection data. Please try again.');
-	        });
+            .catch(error => {
+                console.error('Error fetching FIRE data:', error);
+                alert('Failed to fetch FIRE data. Please try again.');
+            })
+            .finally(() => {
+                // Hide the form after submission
+                form.style.display = 'none';
+        	});
+	    });
 	});
 
 	// Add event listener for Clear Screen
