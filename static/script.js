@@ -737,36 +737,150 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('export_data').addEventListener('click', function() {
-        fetch('/export', {
-            method: 'POST'
-        })
-        .then(response => {
-            if (response.ok) {
-                alert('File exported successfully.');
-            } else {
-                throw new Error('Failed to export file.');
-            }
-        })
-        .catch(error => {
-            console.error('Error uploading file:', error);
-            alert('Failed to upload file to online store. Please try again.');
-        });
+        // Create a modal dialog box
+	    const modal = document.createElement('div');
+	    modal.setAttribute('class', 'modal');
+	    modal.style.display = 'block';
+	    document.body.appendChild(modal);
+
+	    // Create a modal content
+	    const modalContent = document.createElement('div');
+	    modalContent.setAttribute('class', 'modal-content');
+	    modal.appendChild(modalContent);
+
+	    // Create a form
+	    const form = document.createElement('form');
+	    form.setAttribute('id', 'export-form');
+	    form.setAttribute('class', 'export-form');
+	    modalContent.appendChild(form);
+
+	    // Create input field for investment name
+	    const input = document.createElement('input');
+	    input.setAttribute('type', 'text');
+	    input.setAttribute('placeholder', 'File Name');
+	    input.setAttribute('id', 'file-name');
+	    form.appendChild(input);
+
+	    // Create submit button
+	    const submitButton = document.createElement('button');
+	    submitButton.setAttribute('type', 'submit');
+	    submitButton.innerText = 'Export';
+	    form.appendChild(submitButton);
+
+	    // Create close button
+	    const closeButton = document.createElement('span');
+	    closeButton.setAttribute('class', 'close');
+	    closeButton.innerHTML = '&times;';
+	    modalContent.appendChild(closeButton);
+
+	    // When the user clicks on the close button, close the modal
+	    closeButton.onclick = function() {
+	        document.body.removeChild(modal);
+	    }
+
+	    // Add event listener for form submission
+	    form.addEventListener('submit', function(event) {
+	        event.preventDefault();
+
+	        // Get form data
+	        const formData = {
+	            name: form.elements['file-name'].value
+	        };
+
+	        // Send form data to server to add investment
+	        fetch('/export', {
+	            method: 'POST',
+	            headers: {
+	                'Content-Type': 'application/json'
+	            },
+	            body: JSON.stringify(formData)
+	        })
+	        .then(response => {
+	            if (response.ok) {
+	                alert('File exported successfully.');
+	                document.body.removeChild(modal);
+	            } else {
+	                throw new Error('Failed to export file.');
+	            }
+	        })
+	        .catch(error => {
+	            console.error('Error uploading file:', error);
+	            alert('Failed to upload file to online store. Please try again.');
+	        });
+	    });
     });
 
     document.getElementById('import_data').addEventListener('click', function() {
-        fetch('/import', {
-            method: 'POST'
-        })
-        .then(response => {
-            if (response.ok) {
-                alert('File imported successfully.');
-            } else {
-                throw new Error('Failed to import file.');
-            }
-        })
-        .catch(error => {
-            console.error('Error downloading file:', error);
-            alert('Failed to download file from online store. Please try again.');
-        });
+        // Create a modal dialog box
+	    const modal = document.createElement('div');
+	    modal.setAttribute('class', 'modal');
+	    modal.style.display = 'block';
+	    document.body.appendChild(modal);
+
+	    // Create a modal content
+	    const modalContent = document.createElement('div');
+	    modalContent.setAttribute('class', 'modal-content');
+	    modal.appendChild(modalContent);
+
+	    // Create a form
+	    const form = document.createElement('form');
+	    form.setAttribute('id', 'import-form');
+	    form.setAttribute('class', 'import-form');
+	    modalContent.appendChild(form);
+
+	    // Create input field for investment name
+	    const input = document.createElement('input');
+	    input.setAttribute('type', 'text');
+	    input.setAttribute('placeholder', 'File Name');
+	    input.setAttribute('id', 'file-name');
+	    form.appendChild(input);
+
+	    // Create submit button
+	    const submitButton = document.createElement('button');
+	    submitButton.setAttribute('type', 'submit');
+	    submitButton.innerText = 'Import';
+	    form.appendChild(submitButton);
+
+	    // Create close button
+	    const closeButton = document.createElement('span');
+	    closeButton.setAttribute('class', 'close');
+	    closeButton.innerHTML = '&times;';
+	    modalContent.appendChild(closeButton);
+
+	    // When the user clicks on the close button, close the modal
+	    closeButton.onclick = function() {
+	        document.body.removeChild(modal);
+	    }
+
+	    // Add event listener for form submission
+	    form.addEventListener('submit', function(event) {
+	        event.preventDefault();
+
+	        // Get form data
+	        const formData = {
+	            name: form.elements['file-name'].value
+	        };
+
+	        // Send form data to server to add investment
+	        fetch('/import', {
+	            method: 'POST',
+	            headers: {
+	                'Content-Type': 'application/json'
+	            },
+	            body: JSON.stringify(formData)
+	        })
+	        .then(response => {
+	            if (response.ok) {
+	                alert('File imported successfully.');
+	                document.body.removeChild(modal);
+	            } else {
+	                throw new Error('Failed to import file.');
+	            }
+	        })
+	        .catch(error => {
+	            console.error('Error downloading file:', error);
+	            alert('Failed to download file from online store. Please try again.');
+	        });
+	    });
     });
 });

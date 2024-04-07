@@ -66,11 +66,15 @@ The Portfolio Tracker App is a simple yet powerful application designed to help 
 
 * **Import DB from GCP:** Users can import DB from GCP
 
-![Import DB](./example_images/import_db.png)
+![Import DB - 1](./example_images/import_db_1.png)
+
+![Import DB - 2](./example_images/import_db_2.png)
 
 * **Export DB to GCP:** Users can export DB to GCP
 
-![Export DB](./example_images/export_db.png)
+![Export DB - 1](./example_images/export_db_1.png)
+
+![Export DB - 2](./example_images/export_db_2.png)
 
 * **Android App:** Users can also create an Android APP if needed
 	* The Android app will have all the features that the desktop App has

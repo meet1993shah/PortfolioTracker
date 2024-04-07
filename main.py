@@ -49,7 +49,7 @@ def post_add_entry():
     c = conn.cursor()
     try:
         investment_values = [round(float(value), 2) for key, value in data['investments'].items()]
-        total_balance = sum(investment_values)
+        total_balance = round(sum(investment_values), 2)
         investments_json = json.dumps(data['investments'])
         c.execute('''INSERT INTO portfolio (entry_time, investments, balance)
                       VALUES (?,?,?)''', (data['entry_time'], investments_json, total_balance))
@@ -71,7 +71,7 @@ def put_update_entry():
     c = conn.cursor()
     try:
         investment_values = [round(float(value), 2) for key, value in data['investments'].items()]
-        total_balance = sum(investment_values)
+        total_balance = round(sum(investment_values), 2)
         investments_json = json.dumps(data['investments'])
         c.execute('''UPDATE portfolio 
                       SET investments=?, balance=?, updated_at=CURRENT_TIMESTAMP 
@@ -292,7 +292,8 @@ def fire_calculator():
 @app.route('/export', methods=['POST'])
 def export_db():
     try:
-        upload_to_store()
+        data = request.json
+        upload_to_store(data['name'])
         return jsonify({'message': 'File exported successfully.'}), 200
     except Exception as e:
         return jsonify({'message': f'Error exporting file: {repr(e)}'}), 500
@@ -300,7 +301,8 @@ def export_db():
 @app.route('/import', methods=['POST'])
 def import_db():
     try:
-        download_from_store()
+        data = request.json
+        download_from_store(data['name'])
         return jsonify({'message': 'File imported successfully.'}), 200
     except Exception as e:
         return jsonify({'message': f'Error importing file: {repr(e)}'}), 500

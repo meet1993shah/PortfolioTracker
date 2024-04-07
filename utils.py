@@ -8,7 +8,6 @@ from cryptography.hazmat.backends import default_backend
 
 DATE_FORMAT = "%Y-%m-%d"
 BUCKET_NAME = "meet1993shah-portfoliotracker-db" # Replace it with your bucket name
-OBJECT_NAME = "database.db"
 # Google Cloud Secrets JSON file that MUST contain 3 things -
 #   "token_uri" (Ex - "https://oauth2.googleapis.com/token")
 #   "private_key" (Ex - "-----BEGIN PRIVATE KEY-----\n<REDACTED>\n-----END PRIVATE KEY-----\n")
@@ -127,12 +126,12 @@ def get_access_token():
     return ACCESS_TOKEN
 
 # Function to download the database.db file from Google Cloud Storage
-def download_from_store():
+def download_from_store(fileName):
     try:
         access_token = get_access_token()
     except Exception as ex:
         raise Exception(f'error fetching access token: {repr(ex)}')
-    url = f"https://storage.googleapis.com/storage/v1/b/{BUCKET_NAME}/o/{OBJECT_NAME}?alt=media"
+    url = f"https://storage.googleapis.com/storage/v1/b/{BUCKET_NAME}/o/{fileName}?alt=media"
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
@@ -145,12 +144,12 @@ def download_from_store():
         raise Exception(f"Failed to download file. Response: {repr(response)}")
 
 # Function to upload the database.db file to Google Cloud Storage
-def upload_to_store():
+def upload_to_store(fileName):
     try:
         access_token = get_access_token()
     except Exception as ex:
         raise Exception(f'error fetching access token: {repr(ex)}')
-    url = f"https://storage.googleapis.com/upload/storage/v1/b/{BUCKET_NAME}/o?uploadType=media&name={OBJECT_NAME}"
+    url = f"https://storage.googleapis.com/upload/storage/v1/b/{BUCKET_NAME}/o?uploadType=media&name={fileName}"
     headers = {
         "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/octet-stream",
