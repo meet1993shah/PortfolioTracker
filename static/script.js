@@ -620,7 +620,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             }
                         },
                         y: {
-                        	type: 'logarithmic',
                             grid: {
                                 color: 'white'
                             },

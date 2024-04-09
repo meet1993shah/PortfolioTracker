@@ -8,6 +8,7 @@ import platform
 app = Flask(__name__)
 
 DATABASE = 'database.db'
+POOL = None
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -263,7 +264,7 @@ def get_projection():
         balance_data = [dict(row) for row in c.fetchall()]
         X = [row['entry_time'] for row in balance_data]
         Y = [row['balance'] for row in balance_data]
-        x_in, x_date, y_res = get_projections(X, Y)
+        x_in, x_date, y_res = get_projections(POOL, X, Y)
         res = {}
         res['X_data'] = x_in
         res['X_labels'] = x_date
@@ -283,7 +284,7 @@ def fire_calculator():
         balance_data = [dict(row) for row in c.fetchall()]
         X = [row['entry_time'] for row in balance_data]
         Y = [row['balance'] for row in balance_data]
-        fire_data = calculate_fire(X, Y, float(data["annual_expense"]), float(data["tax_rate"]), float(data["safe_withdrawal_rate"]))
+        fire_data = calculate_fire(POOL, X, Y, float(data["annual_expense"]), float(data["tax_rate"]), float(data["safe_withdrawal_rate"]))
         return jsonify(fire_data), 200
     except sqlite3.Error:
         return jsonify({'message': 'Error: Unable to fetch entry data'}), 500
@@ -315,5 +316,9 @@ if __name__ == '__main__':
     if platform.system() == 'Android':
         from android.permissions import Permission, request_permissions
         request_permissions([Permission.INTERNET, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
+    # elif platform.system() in ['Linux', 'Darwin', 'Windows']:
+    #     from multiprocessing import Pool, cpu_count
+    #     POOL = Pool(cpu_count()-1)
+    # Uncomment the above lines for local machine if not using buildozer to build android APK
     init_db() # Ensure the database is initialized
     app.run(debug=False, port=8080)

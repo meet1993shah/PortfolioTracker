@@ -27,52 +27,46 @@ def model_func(x, p, r, c):
     return (p_prime * numerator / denominator) + c_prime
 
 def inverse_model_func(y, p, r, c):
-    r_prime = 1.0 + (r/36500.0)
-    p_prime = p/365.0
-    denominator = 1.0 - r_prime**(1.0/365.0)
-    return 365.0 * math.log(((y*denominator)-p_prime)/((c*denominator) - (p_prime*(r_prime**(1.0/365.0)))),r_prime)
+    r_prime = 1.0 + r / 36500.0
+    p_prime = p / 365.0
+    denominator = 1.0 - r_prime ** (1.0 / 365.0)
+    numerator = (y * denominator - p_prime) / (c * denominator - p_prime * r_prime ** (1.0 / 365.0))
+    return 365.0 * math.log(numerator, r_prime)
 
-def fit_model(x_values, y_values):
-    min_error = float('inf')
-    best_params = None
-    for p in range(20000, 1000001, 5000):
-        for r in [(x / 10.0) for x in range(30, 401)]:
-            for c in range(0, 1000001, 25000):
-                params = (p, r, c)
-                current_error = sum((model_func(x, p, r, c) - y)**2 for x, y in zip(x_values, y_values))
-                if current_error < min_error:
-                    min_error = current_error
-                    best_params = params
-    return best_params
+def get_parameter_space():
+    return [(p, r, c) for p in range(20000, 1000001, 5000)
+           for r in [(x / 10.0) for x in range(30, 401)]
+           for c in range(0, 1000001, 25000)]
 
-def get_projections(X_date, Y_in):
+def process_params(params, x_values, y_values):
+    error = sum((model_func(x, *params) - y)**2 for x, y in zip(x_values, y_values))
+    return error, params
+
+def fit_model(pool, x_values, y_values):
+    parameter_space = get_parameter_space()
+    errors_and_params = pool.starmap(process_params, [(params, x_values, y_values) for params in parameter_space]) if pool else [process_params(params, x_values, y_values) for params in parameter_space]
+    return min(errors_and_params, key=lambda x: x[0])[1]
+
+def get_projections(pool, X_date, Y_in):
     X_in = []
     start_date = datetime.strptime(X_date[0], DATE_FORMAT)
     for x in X_date:
         delta = datetime.strptime(x, DATE_FORMAT)-start_date
         X_in.append(int(delta.days)+1)
 
-    # Curve fitting
-    p_opt, r_opt, c_opt = fit_model(X_in, Y_in)
+    best_params = fit_model(pool, X_in, Y_in)
     
-    # Projection for next month, 6 months, 1 year, 5 years, 10 years
+    # Projection for next 3 years projected every quarter
     last_date_int = X_in[-1]
-    X_proj_in = []
-    for i in range(1,13):
-        X_proj_in.append(last_date_int+(30*i))
-    X_res_in = X_in + X_proj_in
-
-    # Convert projected integer dates to actual dates
+    X_proj_in = [last_date_int + int(365.0/4) * i for i in range(1, 13)]
     X_proj_date = [(start_date + timedelta(days=x)).date().strftime(DATE_FORMAT) for x in X_proj_in]
-    X_res_date = X_date + X_proj_date
 
     # Calculate projected Y values
-    Y_proj = [model_func(x, p_opt, r_opt, c_opt) for x in X_proj_in]
-    Y_res = Y_in + Y_proj
+    Y_proj = [model_func(x, *best_params) for x in X_proj_in]
 
-    return X_res_in, X_res_date, Y_res
+    return X_in + X_proj_in, X_date + X_proj_date, Y_in + Y_proj
 
-def calculate_fire(X_date, Y_in, annual_expense, tax_rate, swr):
+def calculate_fire(pool, X_date, Y_in, annual_expense, tax_rate, swr):
     fire_data = []
     fire_data.append({"field": "Annual Expenses Without Taxes($)", "value": round(annual_expense, 2)})
     fire_data.append({"field": "Effective Tax Rate in Retirement(%)", "value": round(tax_rate, 2)})
@@ -90,13 +84,14 @@ def calculate_fire(X_date, Y_in, annual_expense, tax_rate, swr):
         delta = datetime.strptime(x, DATE_FORMAT)-start_date
         X_in.append(int(delta.days)+1)
 
-    p_opt, r_opt, c_opt = fit_model(X_in, Y_in)
-    x = inverse_model_func(net_worth_needed, p_opt, r_opt, c_opt)
+    best_params = fit_model(pool, X_in, Y_in)
+
+    x = inverse_model_func(net_worth_needed, *best_params)
     x_approx = int(x+1.0)
     re_date = (start_date + timedelta(days=x_approx)).date().strftime(DATE_FORMAT)
     fire_data.append({"field": "Estimated Date of Retirement(yyyy-mm-dd)", "value": re_date})
 
-    y_estimate = model_func(x_approx, p_opt, r_opt, c_opt)
+    y_estimate = model_func(x_approx, *best_params)
     fire_data.append({"field": "Estimated Net Worth at Retirement($)", "value": round(y_estimate, 2)})
 
     return fire_data
