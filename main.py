@@ -316,9 +316,9 @@ if __name__ == '__main__':
     if platform.system() == 'Android':
         from android.permissions import Permission, request_permissions
         request_permissions([Permission.INTERNET, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
-    # elif platform.system() in ['Linux', 'Darwin', 'Windows']:
-    #     from multiprocessing import Pool, cpu_count
-    #     POOL = Pool(cpu_count()-1)
-    # Uncomment the above lines for local machine if not using buildozer to build android APK
+    # Comment out the below elif lines when using buildozer to build android APK
+    elif platform.system() in ['Linux', 'Darwin', 'Windows']:
+        from multiprocessing import Pool, cpu_count
+        POOL = Pool(cpu_count()-1)
     init_db() # Ensure the database is initialized
     app.run(debug=False, port=8080)
