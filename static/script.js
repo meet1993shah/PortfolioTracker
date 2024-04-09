@@ -551,6 +551,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	    const displaySection = document.querySelector('.display');
 	    displaySection.innerHTML = ''; // Clear previous content
 
+	    // Create loading indicator
+	    const loadingIndicator = document.createElement('img');
+	    loadingIndicator.src = 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExczcwbHBiczdjbnhleXE2dmJhYXJqN2ZlbDZhYzFkcmRwdWhjaTZ5MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/swhRkVYLJDrCE/giphy.gif';
+	    loadingIndicator.classList.add('loading');
+	    displaySection.appendChild(loadingIndicator);
+
 	    // Fetch projection data from the server
 	    fetch('/projection')
         .then(response => {
@@ -625,10 +631,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             });
+            // Hide loading indicator after the graph is plotted
+            displaySection.removeChild(loadingIndicator);
         })
         .catch(error => {
             console.error('Error fetching projection data:', error);
             alert('Failed to fetch projection data. Please try again.');
+            // Hide loading indicator on error
+            displaySection.removeChild(loadingIndicator);
         });
 	});
 
@@ -637,6 +647,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	    const displaySection = document.querySelector('.display');
 	    displaySection.innerHTML = ''; // Clear previous content
 
+		// Create loading indicator
+	    const loadingIndicator = document.createElement('img');
+	    loadingIndicator.src = 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExczcwbHBiczdjbnhleXE2dmJhYXJqN2ZlbDZhYzFkcmRwdWhjaTZ5MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/swhRkVYLJDrCE/giphy.gif';
+	    loadingIndicator.classList.add('loading');
+	    
 	    // Create a form to input the entry date
 	    const form = document.createElement('form');
 	    form.classList.add('entry-form');
@@ -665,6 +680,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	    // Add event listener for form submission
 	    form.addEventListener('submit', function(event) {
 	        event.preventDefault();
+	        form.style.display = 'none';
+		    displaySection.appendChild(loadingIndicator);
 
 	        // Get the entry date from the form
 	        const annualExpense = document.getElementById('annual-expense').value;
@@ -717,16 +734,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	                    }
 	                });
 	            });
+	            displaySection.removeChild(loadingIndicator);
 	            displaySection.appendChild(table);
 	        })
             .catch(error => {
                 console.error('Error fetching FIRE data:', error);
                 alert('Failed to fetch FIRE data. Please try again.');
-            })
-            .finally(() => {
-                // Hide the form after submission
-                form.style.display = 'none';
-        	});
+                displaySection.removeChild(loadingIndicator);
+                form.style.display = 'block';
+            });
 	    });
 	});
 

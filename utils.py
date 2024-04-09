@@ -18,23 +18,31 @@ ACCESS_TOKEN_LAST_SAVED_TIME = datetime.utcnow()
 ACCESS_TOKEN_REFRESH_INTERVAL = timedelta(minutes=60)
 
 # Define the model function
-def model_func(x, a, b):
-    return a * ((b**x)-1)
+def model_func(x, p, r, c):
+    r_prime = 1.0 + (r/36500.0)
+    p_prime = p/365.0
+    numerator =  1.0 - r_prime**((x+1.0)/365.0)
+    denominator = 1.0 - r_prime**(1.0/365.0)
+    c_prime = c * (r_prime**(x/365.0))
+    return (p_prime * numerator / denominator) + c_prime
 
-def inverse_model_func(y, a, b):
-    return math.log((y / a) + 1, b)
+def inverse_model_func(y, p, r, c):
+    r_prime = 1.0 + (r/36500.0)
+    p_prime = p/365.0
+    denominator = 1.0 - r_prime**(1.0/365.0)
+    return 365.0 * math.log(((y*denominator)-p_prime)/((c*denominator) - (p_prime*(r_prime**(1.0/365.0)))),r_prime)
 
 def fit_model(x_values, y_values):
     min_error = float('inf')
     best_params = None
-    total_iterations = 0
-    for a in range(0, 1000001, 10000):
-        for b in [(x / 1000)**(1/365) for x in range(0, 2001)]:
-            params = (a, b)
-            current_error = sum((model_func(x, a, b) - y) ** 2 for x, y in zip(x_values, y_values))
-            if current_error < min_error:
-                min_error = current_error
-                best_params = params
+    for p in range(20000, 1000001, 5000):
+        for r in [(x / 10.0) for x in range(30, 401)]:
+            for c in range(0, 1000001, 25000):
+                params = (p, r, c)
+                current_error = sum((model_func(x, p, r, c) - y)**2 for x, y in zip(x_values, y_values))
+                if current_error < min_error:
+                    min_error = current_error
+                    best_params = params
     return best_params
 
 def get_projections(X_date, Y_in):
@@ -45,11 +53,13 @@ def get_projections(X_date, Y_in):
         X_in.append(int(delta.days)+1)
 
     # Curve fitting
-    a_opt, b_opt = fit_model(X_in, Y_in)
+    p_opt, r_opt, c_opt = fit_model(X_in, Y_in)
     
     # Projection for next month, 6 months, 1 year, 5 years, 10 years
     last_date_int = X_in[-1]
-    X_proj_in = [last_date_int+30, last_date_int+180]
+    X_proj_in = []
+    for i in range(1,13):
+        X_proj_in.append(last_date_int+(30*i))
     X_res_in = X_in + X_proj_in
 
     # Convert projected integer dates to actual dates
@@ -57,7 +67,7 @@ def get_projections(X_date, Y_in):
     X_res_date = X_date + X_proj_date
 
     # Calculate projected Y values
-    Y_proj = [model_func(x, a_opt, b_opt) for x in X_proj_in]
+    Y_proj = [model_func(x, p_opt, r_opt, c_opt) for x in X_proj_in]
     Y_res = Y_in + Y_proj
 
     return X_res_in, X_res_date, Y_res
@@ -80,13 +90,13 @@ def calculate_fire(X_date, Y_in, annual_expense, tax_rate, swr):
         delta = datetime.strptime(x, DATE_FORMAT)-start_date
         X_in.append(int(delta.days)+1)
 
-    a_opt, b_opt = fit_model(X_in, Y_in)
-    x = inverse_model_func(net_worth_needed, a_opt, b_opt)
+    p_opt, r_opt, c_opt = fit_model(X_in, Y_in)
+    x = inverse_model_func(net_worth_needed, p_opt, r_opt, c_opt)
     x_approx = int(x+1.0)
     re_date = (start_date + timedelta(days=x_approx)).date().strftime(DATE_FORMAT)
     fire_data.append({"field": "Estimated Date of Retirement(yyyy-mm-dd)", "value": re_date})
 
-    y_estimate = model_func(x_approx, a_opt, b_opt)
+    y_estimate = model_func(x_approx, p_opt, r_opt, c_opt)
     fire_data.append({"field": "Estimated Net Worth at Retirement($)", "value": round(y_estimate, 2)})
 
     return fire_data
